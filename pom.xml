@@ -1,0 +1,44 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.github.tlrx</groupId>
+	<artifactId>elasticsearch-view-plugin</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>elasticsearch-view-plugin</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<elasticsearch.version>0.20.0.Beta1-SNAPSHOT</elasticsearch.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.elasticsearch</groupId>
+			<artifactId>elasticsearch</artifactId>
+			<version>${elasticsearch.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.spullara.mustache.java</groupId>
+			<artifactId>compiler</artifactId>
+			<version>0.8.7</version>
+		</dependency>
+		<!-- Test dependencies -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.10</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>fr.tlrx.elasticsearch</groupId>
+			<artifactId>elasticsearch-test</artifactId>
+			<version>0.0.3-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>

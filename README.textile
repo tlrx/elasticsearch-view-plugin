@@ -1,0 +1,46 @@
+# Test a document view
+curl -XGET 'http://localhost:9200/_view/library/book/1' -d ' 
+{
+  "view": {
+    "language": "mustache",
+    "queries": [
+      {
+        "q1": {
+          "index": "library",
+          "type": "library",
+          "query": {
+            "match_all": {}
+          }
+        }
+      }
+    ],
+    "script": "Hello {{_source.nom}}! Query q1 has {{q1.hits.total}} results."
+  }
+}'
+
+
+# Get a document view
+GET http://localhost:9200/_view/library
+GET http://localhost:9200/_view/library/book
+GET http://localhost:9200/_view/library/book/1
+GET http://localhost:9200/_view/library/book/1/full
+
+
+
+
+# Creates views
+POST http://localhost:9200/views/library
+POST http://localhost:9200/views/library/book
+
+{
+	"views" : [
+		"view_1" : {
+			"language" : "groovy",
+			"view" : {
+				"query": {},
+				"content_type": "",
+				"content": ""
+			}
+		}
+	]
+}

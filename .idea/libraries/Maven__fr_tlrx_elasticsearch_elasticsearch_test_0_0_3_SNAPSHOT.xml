@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: fr.tlrx.elasticsearch:elasticsearch-test:0.0.3-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$M2_REPO$/fr/tlrx/elasticsearch/elasticsearch-test/0.0.3-SNAPSHOT/elasticsearch-test-0.0.3-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$M2_REPO$/fr/tlrx/elasticsearch/elasticsearch-test/0.0.3-SNAPSHOT/elasticsearch-test-0.0.3-SNAPSHOT-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$M2_REPO$/fr/tlrx/elasticsearch/elasticsearch-test/0.0.3-SNAPSHOT/elasticsearch-test-0.0.3-SNAPSHOT-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
