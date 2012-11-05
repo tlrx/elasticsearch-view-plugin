@@ -80,8 +80,13 @@ curl -XPOST 'http://localhost:9200/produits' -d '{
            "views": {
              "full": {
                "view_lang": "mustache",
-               "view": "Hello, I''m rendering the doc {{_id}} from index {{_index}} which has content {{#_source?}} {{title}} {{/_source?}}"
-             }
+               "view": "Hello, Im rendering the doc {{_type}}:{{_id}} in version {{_version}} from index {{_index}} which has content {{#_source.languages}}{{language}}{{/_source.languages}} and {{_source.code}} or {{_source.fournisseur.pays}} and {{#_source.devise?}}with a currency!{{/_source.devise?}}{{^_source.devise}}and no currency{{/_source.devise}}"
+             },
+              "partial": {
+                "view_lang": "mustache",
+                "content_type" : "text/html",
+                "view": "{{<html}} {{$title}}Detail of {{_type}} #{{_id}}{{/title}} {{$content}} {{_source.nom}}:{{_source.code}}<p>{{_source.fournisseur.nom}}</p>{{/content}}  {{/html}}"
+              }
            }
          }
      }

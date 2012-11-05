@@ -2,48 +2,94 @@ package org.elasticsearch.view;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import org.elasticsearch.common.Nullable;
 import org.elasticsearch.common.component.AbstractComponent;
 import org.elasticsearch.common.inject.Inject;
+import org.elasticsearch.common.io.Streams;
 import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.util.concurrent.ConcurrentCollections;
 import org.elasticsearch.env.Environment;
+import org.elasticsearch.script.CompiledScript;
+import org.elasticsearch.script.ScriptEngineService;
 import org.elasticsearch.view.mustache.MustacheViewEngineService;
 
-import java.util.Map;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.util.Set;
+import java.util.concurrent.ConcurrentMap;
 
 public class ViewService extends AbstractComponent {
 
-	private final String defaultViewLang;
+    private final String defaultViewLang;
 
-	private final ImmutableMap<String, ViewEngineService> viewEngines;
+    private final ImmutableMap<String, ViewEngineService> viewEngines;
 
-	public ViewService(Settings settings) {
-		this(settings, new Environment(), ImmutableSet.<ViewEngineService> builder()
-				.add(new MustacheViewEngineService(settings))
-				.build());
-	}
+    private final ConcurrentMap<String, CompiledScript> staticCache = ConcurrentCollections.newConcurrentMap();
 
-	@Inject
-	public ViewService(Settings settings, Environment environment, Set<ViewEngineService> viewEngines) {
-		super(settings);
+    public ViewService(Settings settings) {
+        this(settings, new Environment(), ImmutableSet.<ViewEngineService>builder()
+                .add(new MustacheViewEngineService(settings))
+                .build());
+    }
 
-		this.defaultViewLang = componentSettings.get("default_view_lang", "mustache");
+    @Inject
+    public ViewService(Settings settings, Environment environment, Set<ViewEngineService> viewEngines) {
+        super(settings);
 
-		ImmutableMap.Builder<String, ViewEngineService> builder = ImmutableMap.builder();
-		for (ViewEngineService viewEngine : viewEngines) {
-			for (String type : viewEngine.types()) {
-				builder.put(type, viewEngine);
-			}
-		}
-		this.viewEngines = builder.build();
-	}
+        // todo vérifier que ça marche ce truc
+        this.defaultViewLang = componentSettings.get("default_view_lang", "mustache");
 
-	public Object render(String view, @Nullable Map<String, Object> vars) {
-		return render(defaultViewLang, view, vars);
-	}
+        ImmutableMap.Builder<String, ViewEngineService> builder = ImmutableMap.builder();
+        for (ViewEngineService viewEngine : viewEngines) {
+            for (String type : viewEngine.types()) {
+                builder.put(type, viewEngine);
+            }
+        }
+        this.viewEngines = builder.build();
 
-	public Object render(String lang, String view, @Nullable Map<String, Object> vars) {
-        return viewEngines.get(lang).render(view, vars);
-	}
+        // compile static scripts
+        File viewsFile = new File(environment.configFile(), "views");
+        if (viewsFile.exists()) {
+            processViewsDirectory("", viewsFile);
+        }
+    }
+
+    private void processViewsDirectory(String prefix, File dir) {
+        for (File file : dir.listFiles()) {
+            if (file.isDirectory()) {
+                processViewsDirectory(prefix + file.getName() + "_", file);
+            } else {
+                int extIndex = file.getName().lastIndexOf('.');
+                if (extIndex != -1) {
+                    String ext = file.getName().substring(extIndex + 1);
+                    String viewName = prefix + file.getName().substring(0, extIndex);
+                    boolean found = false;
+                    for (ViewEngineService viewEngine : viewEngines.values()) {
+                        for (String s : viewEngine.extensions()) {
+                            if (s.equals(ext)) {
+                                found = true;
+                                try {
+                                    String view = Streams.copyToString(new InputStreamReader(new FileInputStream(file), "UTF-8"));
+                                    viewEngine.load(viewName, view);
+                                } catch (Exception e) {
+                                    logger.warn("failed to load/compile view [{}]", e, viewName);
+                                }
+                                break;
+                            }
+                        }
+                        if (found) {
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        logger.warn("no view engine found for [{}]", ext);
+                    }
+                }
+            }
+        }
+    }
+
+    public Object render(ViewContext context) {
+        return viewEngines.get(context.lang() == null ? defaultViewLang : context.lang()).render(context.view(), context.varsAsMap());
+    }
 }

@@ -12,7 +12,6 @@ import org.elasticsearch.rest.*;
 import java.io.IOException;
 
 import static org.elasticsearch.rest.RestRequest.Method.GET;
-import static org.elasticsearch.rest.RestStatus.OK;
 
 public class RestViewAction extends BaseRestHandler {
 
@@ -20,6 +19,7 @@ public class RestViewAction extends BaseRestHandler {
     public RestViewAction(Settings settings, Client client, RestController controller) {
         super(settings, client);
         controller.registerHandler(GET, "/{index}/{type}/{id}/_view", this);
+        controller.registerHandler(GET, "/_view/{index}/{type}/{id}", this);
         controller.registerHandler(GET, "/_view/{index}/{type}/{id}/{format}", this);
     }
 
@@ -38,7 +38,8 @@ public class RestViewAction extends BaseRestHandler {
 
             public void onResponse(ViewResponse response) {
                 try {
-                    channel.sendResponse(new StringRestResponse(OK, response.content()));
+                    channel.sendResponse(new BytesRestResponse(response.content().getBytes(), response.contentType()));
+                    //channel.sendResponse(new StringRestResponse(OK, response.content()));
                 } catch (Exception e) {
                     onFailure(e);
                 }
