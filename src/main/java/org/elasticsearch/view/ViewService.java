@@ -1,7 +1,7 @@
 package org.elasticsearch.view;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
+import org.elasticsearch.common.collect.ImmutableMap;
+import org.elasticsearch.common.collect.ImmutableSet;
 import org.elasticsearch.common.component.AbstractComponent;
 import org.elasticsearch.common.inject.Inject;
 import org.elasticsearch.common.io.Streams;
@@ -89,7 +89,8 @@ public class ViewService extends AbstractComponent {
         }
     }
 
-    public Object render(ViewContext context) {
-        return viewEngines.get(context.lang() == null ? defaultViewLang : context.lang()).render(context.view(), context.varsAsMap());
+    public ViewResult render(ViewContext context) {
+        ViewEngineService viewEngineService = viewEngines.get(context.lang() == null ? defaultViewLang : context.lang());
+        return new ViewResult(viewEngineService.contentType(), viewEngineService.render(context.view(), context.varsAsMap()));
     }
 }

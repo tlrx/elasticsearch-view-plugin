@@ -10,7 +10,9 @@ public interface ViewEngineService {
 
     String[] extensions();
 
+    String contentType();
+
     void load(String name, String view);
 	
-    Object render(String view, @Nullable Map<String, Object>vars);
+    byte[] render(String view, @Nullable Map<String, Object>vars);
 }

@@ -4,18 +4,18 @@ import org.elasticsearch.action.ActionResponse;
 
 public class ViewResponse extends ActionResponse {
 
-    public String content = "";
+    public byte[] content;
     public String contentType = "";
 
     ViewResponse() {
     }
 
-    public ViewResponse(String content, String contentType) {
+    public ViewResponse(String contentType, byte[] content) {
         this.content = content;
         this.contentType = contentType;
     }
 
-    public String content() {
+    public byte[] content() {
         return this.content;
     }
 

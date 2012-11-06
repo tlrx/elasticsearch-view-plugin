@@ -1,6 +1,8 @@
 package org.elasticsearch.view;
 
 import org.elasticsearch.common.collect.ImmutableMap;
+import org.elasticsearch.common.util.concurrent.ConcurrentCollections;
+import org.elasticsearch.search.SearchHits;
 
 import java.util.Map;
 
@@ -13,6 +15,7 @@ public class ViewContext {
     private String id;
     private Long version;
     private Map<String, Object> source;
+    private Map<String, SearchHits> queries;
 
     public ViewContext(String lang, String view) {
         this.lang = lang;
@@ -25,6 +28,10 @@ public class ViewContext {
 
     public String view() {
         return view;
+    }
+
+    public Map<String, SearchHits> queries() {
+        return queries;
     }
 
     public ViewContext index(String index) {
@@ -52,6 +59,14 @@ public class ViewContext {
         return this;
     }
 
+    public ViewContext queriesAndHits(String queryName, SearchHits hits) {
+        if (this.queries == null) {
+            this.queries = ConcurrentCollections.newConcurrentMap();
+        }
+        this.queries.put(queryName, hits);
+        return this;
+    }
+
     public Map<String, Object> varsAsMap() {
         ImmutableMap.Builder<String, Object> builder = ImmutableMap.builder();
         if (this.index != null) {
@@ -70,6 +85,13 @@ public class ViewContext {
             ImmutableMap.Builder<String, Object> sourceAsMap = ImmutableMap.builder();
             sourceAsMap.putAll(this.source);
             builder.put("_source", sourceAsMap.build());
+        }
+        if (this.queries() != null) {
+            ImmutableMap.Builder<String, Object> queryHitsAsMap = ImmutableMap.builder();
+            for (String query : this.queries().keySet()) {
+                queryHitsAsMap.put(query, this.queries().get(query));
+            }
+            builder.put("_queries", queryHitsAsMap.build());
         }
 
         return builder.build();

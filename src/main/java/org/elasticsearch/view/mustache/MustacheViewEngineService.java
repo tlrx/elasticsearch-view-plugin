@@ -26,11 +26,11 @@ public class MustacheViewEngineService extends AbstractComponent implements View
     private final ConcurrentMap<String, String> staticCache = ConcurrentCollections.newConcurrentMap();
 
     @Override
-    public Object render(String view, @Nullable Map<String, Object> vars) {
+    public byte[] render(String view, @Nullable Map<String, Object> vars) {
         Writer writer = new StringWriter();
         Mustache mustache = factory.compile(new StringReader(view), "render");
         mustache.execute(writer, vars);
-        return writer.toString();
+        return writer.toString().getBytes();
     }
 
     @Inject
@@ -55,6 +55,11 @@ public class MustacheViewEngineService extends AbstractComponent implements View
     @Override
     public String[] extensions() {
         return new String[]{"mustache"};
+    }
+
+    @Override
+    public String contentType() {
+        return "text/html;charset=utf8";
     }
 
     @Override

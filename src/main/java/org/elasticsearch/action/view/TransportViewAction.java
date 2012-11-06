@@ -3,6 +3,9 @@ package org.elasticsearch.action.view;
 import org.elasticsearch.ElasticSearchException;
 import org.elasticsearch.ElasticSearchIllegalArgumentException;
 import org.elasticsearch.ElasticSearchParseException;
+import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.search.TransportSearchAction;
 import org.elasticsearch.action.support.single.shard.TransportShardSingleOperationAction;
 import org.elasticsearch.cluster.ClusterService;
 import org.elasticsearch.cluster.ClusterState;
@@ -10,6 +13,7 @@ import org.elasticsearch.cluster.block.ClusterBlockException;
 import org.elasticsearch.cluster.block.ClusterBlockLevel;
 import org.elasticsearch.cluster.metadata.MappingMetaData;
 import org.elasticsearch.cluster.routing.ShardIterator;
+import org.elasticsearch.common.collect.ImmutableMap;
 import org.elasticsearch.common.inject.Inject;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.index.get.GetResult;
@@ -19,6 +23,7 @@ import org.elasticsearch.indices.IndicesService;
 import org.elasticsearch.threadpool.ThreadPool;
 import org.elasticsearch.transport.TransportService;
 import org.elasticsearch.view.ViewContext;
+import org.elasticsearch.view.ViewResult;
 import org.elasticsearch.view.ViewService;
 
 import java.io.IOException;
@@ -29,16 +34,19 @@ public class TransportViewAction extends TransportShardSingleOperationAction<Vie
 
     private final ViewService viewService;
     private final IndicesService indicesService;
+    private final TransportSearchAction searchAction;
 
     @Inject
     public TransportViewAction(Settings settings, ThreadPool threadPool,
                                ClusterService clusterService,
                                TransportService transportService,
                                IndicesService indicesService,
-                               ViewService viewService) {
+                               ViewService viewService,
+                               TransportSearchAction searchAction) {
         super(settings, threadPool, clusterService, transportService);
         this.indicesService = indicesService;
         this.viewService = viewService;
+        this.searchAction = searchAction;
     }
 
     @Override
@@ -89,37 +97,18 @@ public class TransportViewAction extends TransportShardSingleOperationAction<Vie
             throw new ElasticSearchIllegalArgumentException("Document not found, cannot render view");
         }
 
-        // Then, get the view stored in the mapping _meta field
-        MappingMetaData mappingMetaData = clusterService.state().metaData().index(request.index()).mapping(request.type());
-        ViewContext viewContext = null;
-        try {
-            Map<String, Object> mapping = mappingMetaData.sourceAsMap();
-            for (String key : mapping.keySet()) {
-                if ("_meta".equals(key)) {
-                    Object meta = mapping.get(key);
-                    if (meta instanceof Map) {
-                        Object views = ((Map) meta).get("views");
-                        if ((views != null) && (views instanceof Map)) {
-                            Map mapViews = (Map) views;
+        // Try to get a view stored at document level
+        ViewContext viewContext = extract(getResult.sourceAsMap(), request.format());
 
-                            Object candidate = mapViews.get(request.format());
-                            if ((candidate == null) && (!mapViews.isEmpty())) {
-                                candidate = mapViews.values().iterator().next();
-                            }
-                            if ((candidate != null) && (candidate instanceof Map)) {
-                                Map mapCandidate = (Map) candidate;
-
-                                // ViewContext holds the data for view rendering
-                                viewContext = new ViewContext((String) mapCandidate.get("view_lang"), (String) mapCandidate.get("view"));
-                            }
-                        }
-                        break;
-                    }
-                }
+        if (viewContext == null) {
+            // Then, get the view stored in the mapping _meta field
+            MappingMetaData mappingMetaData = clusterService.state().metaData().index(request.index()).mapping(request.type());
+            try {
+                Map<String, Object> mapping = mappingMetaData.sourceAsMap();
+                viewContext = extract(mapping, request.format());
+            } catch (IOException e) {
+                throw new ElasticSearchParseException("Failed to parse mapping content to map", e);
             }
-
-        } catch (IOException e) {
-            throw new ElasticSearchParseException("Failed to parse mapping content to map", e);
         }
 
         if (viewContext == null) {
@@ -134,8 +123,66 @@ public class TransportViewAction extends TransportShardSingleOperationAction<Vie
                     .source(getResult.sourceAsMap());
 
         // Ok, let's render it with a ViewEngineService
-        Object render = viewService.render(viewContext);
-                //todo gérer le content type correctement boudiou!
-        return new ViewResponse((String)render, "text/html;charset=utf8");
+        ViewResult result = viewService.render(viewContext);
+
+        return new ViewResponse(result.contentType(), result.content());
+    }
+
+    private ViewContext extract(Map<String, Object> sourceAsMap, String format) {
+        for (String key : sourceAsMap.keySet()) {
+            Object views = null;
+
+            // When searching in a mapping
+            if ("_meta".equals(key)) {
+                Object meta = sourceAsMap.get(key);
+                if (meta instanceof Map) {
+                    views = ((Map) meta).get("views");
+                }
+            }
+
+            // When searching in the document content
+            if ("views".equals(key)) {
+                views = sourceAsMap.get(key);
+            }
+
+            if ((views != null) && (views instanceof Map)) {
+                Map mapViews = (Map) views;
+
+                Object candidate = mapViews.get(format);
+                if ((candidate == null) && (!mapViews.isEmpty())) {
+                    candidate = mapViews.values().iterator().next();
+                }
+                if ((candidate != null) && (candidate instanceof Map)) {
+                    Map mapCandidate = (Map) candidate;
+
+                    // ViewContext holds the data for view rendering
+                    ViewContext viewContext = new ViewContext((String) mapCandidate.get("view_lang"), (String) mapCandidate.get("view"));
+
+                    Object queries = mapCandidate.get("queries");
+                    if ((queries != null) && (queries instanceof Map)) {
+                        Map<String, Object> mapQueries = (Map) queries;
+
+                        for (String queryName : mapQueries.keySet()) {
+                            try {
+                                Map<String, Object> mapQuery = (Map) mapQueries.get(queryName);
+                                SearchRequest searchRequest = new SearchRequest((String) mapQuery.get("index")); //todo gérer les types et les multi indexs
+
+                                ImmutableMap.Builder<String, Object> builder = ImmutableMap.builder();
+                                builder.put("query", (Map) mapQuery.get("query"));
+                                searchRequest.source(builder.build());
+
+                                SearchResponse searchResponse = searchAction.execute(searchRequest).get();
+                                viewContext.queriesAndHits(queryName, searchResponse.hits());
+
+                            } catch (Exception e) {
+                                //todo gérer les exceptions
+                            }
+                        }
+                        return viewContext;
+                    }
+                }
+            }
+        }
+        return null;
     }
 }

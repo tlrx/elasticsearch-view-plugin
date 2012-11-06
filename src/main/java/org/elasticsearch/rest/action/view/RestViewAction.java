@@ -18,7 +18,6 @@ public class RestViewAction extends BaseRestHandler {
     @Inject
     public RestViewAction(Settings settings, Client client, RestController controller) {
         super(settings, client);
-        controller.registerHandler(GET, "/{index}/{type}/{id}/_view", this);
         controller.registerHandler(GET, "/_view/{index}/{type}/{id}", this);
         controller.registerHandler(GET, "/_view/{index}/{type}/{id}/{format}", this);
     }
@@ -38,8 +37,7 @@ public class RestViewAction extends BaseRestHandler {
 
             public void onResponse(ViewResponse response) {
                 try {
-                    channel.sendResponse(new BytesRestResponse(response.content().getBytes(), response.contentType()));
-                    //channel.sendResponse(new StringRestResponse(OK, response.content()));
+                    channel.sendResponse(new BytesRestResponse(response.content(), response.contentType()));
                 } catch (Exception e) {
                     onFailure(e);
                 }
