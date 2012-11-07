@@ -61,7 +61,10 @@ curl -XPOST 'http://localhost:9200/produits' -d '{
                "type": "string",
                "index": "not_analyzed",
                "include_in_all": "false"
-             }
+             },
+              "logo" : {
+                 "type": "binary"
+              }
            }
          },
          "stock": {
@@ -76,20 +79,26 @@ curl -XPOST 'http://localhost:9200/produits' -d '{
            "ignore_malformed": "true"
          },
          "image" : {
-            "type": "string",
-            "index": "not_analyzed",
-            "store": "yes"
+            "type": "binary"
          }
        },
          "_meta": {
            "views": {
              "light": {
                "view_lang": "mustache",
-               "view": "Hello, Im rendering the doc {{_type}}:{{_id}} in version {{_version}} from index {{_index}} which has content {{#_source.languages}}{{language}}{{/_source.languages}} and {{_source.code}} or {{_source.fournisseur.pays}} and {{#_source.devise?}}with a currency!{{/_source.devise?}}{{^_source.devise}}and no currency{{/_source.devise}}"
+               "view": "Hello, Im rendering the doc {{_type}}:{{_id}} in version {{_version}} from index {{_index}} which has content {{#_source.languages}}{{language}}{{/_source.languages}} and {{_source.code}} or {{_source.fournisseur.pays}} and {{#_source.devise?}}with a currency!{{/_source.devise?}}{{^_source.devise}}and no currency{{/_source.devise}}<br/> <img src=\"/_view/produits/produit/{{_id}}/logo\"/>"
              },
+              "technical-details": {
+                "view_lang": "binary",
+                "view": "_source.details"
+              },
+                "logo": {
+                  "view_lang": "binary",
+                  "view": "_source.fournisseur.logo"
+                },
               "full": {
                 "view_lang": "mustache",
-                "view": "{{<html}} {{$title}}Detail of {{_type}} #{{_id}}{{/title}} {{$content}} {{_source.nom}}:{{_source.code}}<p>{{_source.fournisseur.nom}}</p> {{<image}}{{$imageBase64}}{{_source.image}}{{/imageBase64}}{{/image}}  {{/content}} {{/html}}"
+                "view": "{{<html}} {{$title}}Detail of {{_type}} #{{_id}}{{/title}} {{$content}} {{_source.nom}}:{{_source.code}}<p>{{_source.fournisseur.nom}}</p> {{<image}}{{$imageBase64}}{{_source.fournisseur.logo}}{{/imageBase64}}{{/image}} <br/> <a href=\"/_view/produits/produit/{{_id}}/technical-details\" target=\"_blank\">Technical details</a> <br/>Other products with <a href=\"/_view/catalog/list-of-products-by-size/{{_source.echelle}}\">size {{_source.echelle}}</a> {{/content}} {{/html}}"
               }
            }
          }
@@ -120,7 +129,7 @@ curl -XPUT 'http://localhost:9200/catalog/list-of-products-by-size/1:10' -d '{
                     }
                 }
             },
-            "view" : "{{<html}} {{$title}}List of products with a size of 1:10{{/title}} {{$content}} {{#_queries.products_with_size_1_10}} {{type}}:{{id}} {{source.nom}}/{{_source.code}} {{/_queries.products_with_size_1_10}}  {{/content}} {{/html}}"
+            "view" : "{{<html}} {{$title}}List of products with a size of 1:10{{/title}} {{$content}} <table>{{#_queries.products_with_size_1_10}} <tr><td>{{_type}}:{{_id}}</td><td>{{_source.nom}}/{{_source.code}}</td></tr>{{/_queries.products_with_size_1_10}}</table>  {{/content}} {{/html}}"
         }
     }
 }'

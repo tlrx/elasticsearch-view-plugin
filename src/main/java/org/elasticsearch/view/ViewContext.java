@@ -2,8 +2,11 @@ package org.elasticsearch.view;
 
 import org.elasticsearch.common.collect.ImmutableMap;
 import org.elasticsearch.common.util.concurrent.ConcurrentCollections;
+import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class ViewContext {
@@ -89,7 +92,20 @@ public class ViewContext {
         if (this.queries() != null) {
             ImmutableMap.Builder<String, Object> queryHitsAsMap = ImmutableMap.builder();
             for (String query : this.queries().keySet()) {
-                queryHitsAsMap.put(query, this.queries().get(query));
+
+                SearchHits searchHits = this.queries().get(query);
+                List<Map<String, Object>> hits = new ArrayList<Map<String, Object>>(searchHits.hits().length);
+                for (SearchHit hit : searchHits.hits()) {
+                    ImmutableMap.Builder<String, Object> hitProperties = ImmutableMap.builder();
+                    hitProperties.put("_index", hit.index());
+                    hitProperties.put("_type", hit.type());
+                    hitProperties.put("_id", hit.id());
+                    hitProperties.put("_version", hit.version());
+                    hitProperties.put("_source", hit.sourceAsMap());
+                    hits.add(hitProperties.build());
+                }
+
+                queryHitsAsMap.put(query, hits);
             }
             builder.put("_queries", queryHitsAsMap.build());
         }

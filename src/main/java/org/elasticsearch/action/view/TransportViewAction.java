@@ -178,8 +178,8 @@ public class TransportViewAction extends TransportShardSingleOperationAction<Vie
                                 //todo gérer les exceptions
                             }
                         }
-                        return viewContext;
                     }
+                    return viewContext;
                 }
             }
         }

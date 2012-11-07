@@ -10,6 +10,7 @@ import org.elasticsearch.common.util.concurrent.ConcurrentCollections;
 import org.elasticsearch.env.Environment;
 import org.elasticsearch.script.CompiledScript;
 import org.elasticsearch.script.ScriptEngineService;
+import org.elasticsearch.view.binary.BinaryViewEngineService;
 import org.elasticsearch.view.mustache.MustacheViewEngineService;
 
 import java.io.File;
@@ -29,6 +30,7 @@ public class ViewService extends AbstractComponent {
     public ViewService(Settings settings) {
         this(settings, new Environment(), ImmutableSet.<ViewEngineService>builder()
                 .add(new MustacheViewEngineService(settings))
+                .add(new BinaryViewEngineService(settings))
                 .build());
     }
 
