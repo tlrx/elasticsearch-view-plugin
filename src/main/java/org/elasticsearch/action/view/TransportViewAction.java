@@ -1,3 +1,21 @@
+/*
+ * Licensed to Elastic Search and Shay Banon under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership. Elastic Search licenses this
+ * file to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.elasticsearch.action.view;
 
 import org.elasticsearch.ElasticSearchException;
@@ -20,6 +38,7 @@ import org.elasticsearch.index.get.GetResult;
 import org.elasticsearch.index.service.IndexService;
 import org.elasticsearch.index.shard.service.IndexShard;
 import org.elasticsearch.indices.IndicesService;
+import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.threadpool.ThreadPool;
 import org.elasticsearch.transport.TransportService;
 import org.elasticsearch.view.ViewContext;
@@ -27,6 +46,7 @@ import org.elasticsearch.view.ViewResult;
 import org.elasticsearch.view.ViewService;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 
@@ -115,7 +135,7 @@ public class TransportViewAction extends TransportShardSingleOperationAction<Vie
             throw new ElasticSearchIllegalArgumentException("No view defined in the mapping for document type [" + request.type() + "]");
         }
 
-        // Set some data required for view rendering
+        // Set some org.elasticsearch.test.integration.views.mappings.data required for view rendering
         viewContext.index(getResult.index())
                     .type(getResult.type())
                     .id(getResult.id())
@@ -155,7 +175,7 @@ public class TransportViewAction extends TransportShardSingleOperationAction<Vie
                 if ((candidate != null) && (candidate instanceof Map)) {
                     Map mapCandidate = (Map) candidate;
 
-                    // ViewContext holds the data for view rendering
+                    // ViewContext holds the org.elasticsearch.test.integration.views.mappings.data for view rendering
                     ViewContext viewContext = new ViewContext((String) mapCandidate.get("view_lang"), (String) mapCandidate.get("view"));
 
                     Object queries = mapCandidate.get("queries");
@@ -165,7 +185,28 @@ public class TransportViewAction extends TransportShardSingleOperationAction<Vie
                         for (String queryName : mapQueries.keySet()) {
                             try {
                                 Map<String, Object> mapQuery = (Map) mapQueries.get(queryName);
-                                SearchRequest searchRequest = new SearchRequest((String) mapQuery.get("index")); //todo gérer les types et les multi indexs
+
+                                String[] indices = null;
+                                if (mapQuery.get("indices") instanceof List) {
+                                    indices = (String[]) ((List) mapQuery.get("indices")).toArray(new String[0]);
+                                } else if (mapQuery.get("indices") instanceof String) {
+                                    indices = new String[]{((String) mapQuery.get("indices"))};
+                                }
+
+                                String[] types = null;
+                                if (mapQuery.get("types") instanceof List) {
+                                    types = (String[]) ((List) mapQuery.get("types")).toArray(new String[0]);
+                                } else if (mapQuery.get("types") instanceof String) {
+                                    types = new String[]{((String) mapQuery.get("types"))};
+                                }
+
+                                SearchRequest searchRequest = new SearchRequest();
+                                if (indices != null) {
+                                    searchRequest.indices(indices);
+                                }
+                                if (types != null) {
+                                    searchRequest.types(types);
+                                }
 
                                 ImmutableMap.Builder<String, Object> builder = ImmutableMap.builder();
                                 builder.put("query", (Map) mapQuery.get("query"));
@@ -175,7 +216,7 @@ public class TransportViewAction extends TransportShardSingleOperationAction<Vie
                                 viewContext.queriesAndHits(queryName, searchResponse.hits());
 
                             } catch (Exception e) {
-                                //todo gérer les exceptions
+                                viewContext.queriesAndHits(queryName, null);
                             }
                         }
                     }

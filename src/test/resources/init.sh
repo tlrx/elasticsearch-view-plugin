@@ -99,6 +99,10 @@ curl -XPOST 'http://localhost:9200/produits' -d '{
               "full": {
                 "view_lang": "mustache",
                 "view": "{{<html}} {{$title}}Detail of {{_type}} #{{_id}}{{/title}} {{$content}} {{_source.nom}}:{{_source.code}}<p>{{_source.fournisseur.nom}}</p> {{<image}}{{$imageBase64}}{{_source.fournisseur.logo}}{{/imageBase64}}{{/image}} <br/> <a href=\"/_view/produits/produit/{{_id}}/technical-details\" target=\"_blank\">Technical details</a> <br/>Other products with <a href=\"/_view/catalog/list-of-products-by-size/{{_source.echelle}}\">size {{_source.echelle}}</a> {{/content}} {{/html}}"
+              },
+              "test-mvel": {
+                "view_lang": "mvel",
+                "view": "Hello, my code is @{_source.nom.toUpperCase()} @includeNamed{\"test\"} </p>"
               }
            }
          }

@@ -1,3 +1,21 @@
+/*
+ * Licensed to Elastic Search and Shay Banon under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership. Elastic Search licenses this
+ * file to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.elasticsearch.view;
 
 import org.elasticsearch.common.collect.ImmutableMap;
@@ -12,6 +30,7 @@ import org.elasticsearch.script.CompiledScript;
 import org.elasticsearch.script.ScriptEngineService;
 import org.elasticsearch.view.binary.BinaryViewEngineService;
 import org.elasticsearch.view.mustache.MustacheViewEngineService;
+import org.elasticsearch.view.mvel.MvelViewEngineService;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,6 +48,7 @@ public class ViewService extends AbstractComponent {
 
     public ViewService(Settings settings) {
         this(settings, new Environment(), ImmutableSet.<ViewEngineService>builder()
+                .add(new MvelViewEngineService(settings))
                 .add(new MustacheViewEngineService(settings))
                 .add(new BinaryViewEngineService(settings))
                 .build());
@@ -38,8 +58,7 @@ public class ViewService extends AbstractComponent {
     public ViewService(Settings settings, Environment environment, Set<ViewEngineService> viewEngines) {
         super(settings);
 
-        // todo vérifier que ça marche ce truc
-        this.defaultViewLang = componentSettings.get("default_view_lang", "mustache");
+        this.defaultViewLang = componentSettings.get("default_view_lang", "mvel");
 
         ImmutableMap.Builder<String, ViewEngineService> builder = ImmutableMap.builder();
         for (ViewEngineService viewEngine : viewEngines) {

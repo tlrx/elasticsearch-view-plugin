@@ -1,0 +1,54 @@
+{
+    "product": {
+        "properties": {
+            "name": {
+                "type": "string"
+            },
+            "type": {
+                "type": "string",
+                "index": "not_analyzed"
+            },
+            "brand": {
+                "type": "string"
+            },
+            "code": {
+                "type": "string",
+                "index": "not_analyzed"
+            },
+            "description": {
+                "type": "string"
+            },
+            "price": {
+                "type": "double"
+            },
+            "picture": {
+                "type": "binary"
+            },
+            "since": {
+                "type": "date",
+                "format": "YYYY",
+                "ignore_malformed": "true"
+            },
+            "scale": {
+                "type": "string",
+                "null_value": "unknown",
+                "index": "not_analyzed"
+            }
+        },
+        "_meta": {
+            "views": {
+                "default": {
+                    "view": "Rendering the document #@{_id} in version @{_version} of type @{_type} from index @{_index}"
+                },
+                "full": {
+                    "view_lang": "mvel",
+                    "view": "<div id=\"product-@{_id}\"><h2>Detail of @{_source.name.toUpperCase()}</h2><p>Year: @{_source.since}, price: @{_source.price}€</p><p>@{_source.description}</p><p>@includeNamed{\"copyright\"}</p></div>"
+                },
+                "logo": {
+                    "view_lang": "binary",
+                    "view": "_source.picture"
+                }
+            }
+        }
+    }
+}
