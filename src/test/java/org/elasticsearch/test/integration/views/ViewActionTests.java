@@ -40,10 +40,12 @@ public class ViewActionTests {
     @Before
     public void setUp() {
 
-        // Instantiates a local node & client
+        // Instantiates a local node & client with few templates in config dir
         esSetup = new EsSetup(ImmutableSettings
                                 .settingsBuilder()
                                     .put("path.conf", "./target/test-classes/org/elasticsearch/test/integration/views/config/")
+                .put("node.local", false)
+                .put("http.enabled", true)
                                     .build());
 
         // Clean all and create test org.elasticsearch.test.integration.views.mappings.data
@@ -104,12 +106,11 @@ public class ViewActionTests {
                         "                    }\n" +
                         "                }\n" +
                         "            },\n" +
-                        "            \"view\" : \"@includeNamed{'list-of-products'}\"\n" +
+                        "            \"view\" : \"@includeNamed{'list-of-products'; title='List of products'}\"\n" +
                         "        }\n" +
                         "    }\n" +
                         "}")
         );
-
 
         ViewResponse response = esSetup.client().execute(ViewAction.INSTANCE, new ViewRequest("catalog", "list-of-products-by-size", "1:10")).get();
         assertEquals(fromClassPath("org/elasticsearch/test/integration/views/config/views/list-of-products.html").toString(), new String(response.content(), "UTF-8"));

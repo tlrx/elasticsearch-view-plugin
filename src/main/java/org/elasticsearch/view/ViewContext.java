@@ -24,6 +24,7 @@ import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -89,7 +90,7 @@ public class ViewContext {
     }
 
     public Map<String, Object> varsAsMap() {
-        ImmutableMap.Builder<String, Object> builder = ImmutableMap.builder();
+        Map<String, Object> builder = new HashMap<String, Object>();
         if (this.index != null) {
             builder.put("_index", this.index);
         }
@@ -128,6 +129,6 @@ public class ViewContext {
             builder.put("_queries", queryHitsAsMap.build());
         }
 
-        return builder.build();
+        return builder;
     }
 }

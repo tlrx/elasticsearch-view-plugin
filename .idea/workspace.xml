@@ -2,39 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="000145b1-9c27-40ef-93b4-4b7de6b40eba" name="Default" comment="OK mustache">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/elasticsearch/view/mvel/MvelViewEngineService.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/java/org/elasticsearch/test/integration/views/ViewActionTests.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/resources/config/views/test.mv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/resources/org/elasticsearch/test/integration/views/config/views/copyright.mv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/resources/org/elasticsearch/test/integration/views/config/views/list-of-products.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/resources/org/elasticsearch/test/integration/views/config/views/list-of-products.mv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/resources/org/elasticsearch/test/integration/views/data/products.json" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/resources/org/elasticsearch/test/integration/views/mappings/product.json" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_lucene_lucene_analyzers_3_6_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_lucene_lucene_core_3_6_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_lucene_lucene_highlighter_3_6_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_lucene_lucene_memory_3_6_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_lucene_lucene_queries_3_6_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_elasticsearch_elasticsearch_0_20_0_Beta1_SNAPSHOT.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/java/org/elasticsearch/rest/action/views/ViewsActionTest.java" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/elasticsearch-view-plugin.iml" afterPath="$PROJECT_DIR$/elasticsearch-view-plugin.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/elasticsearch/action/view/TransportViewAction.java" afterPath="$PROJECT_DIR$/src/main/java/org/elasticsearch/action/view/TransportViewAction.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/elasticsearch/action/view/ViewAction.java" afterPath="$PROJECT_DIR$/src/main/java/org/elasticsearch/action/view/ViewAction.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/elasticsearch/action/view/ViewRequest.java" afterPath="$PROJECT_DIR$/src/main/java/org/elasticsearch/action/view/ViewRequest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/elasticsearch/action/view/ViewRequestBuilder.java" afterPath="$PROJECT_DIR$/src/main/java/org/elasticsearch/action/view/ViewRequestBuilder.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/elasticsearch/action/view/ViewResponse.java" afterPath="$PROJECT_DIR$/src/main/java/org/elasticsearch/action/view/ViewResponse.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/elasticsearch/plugin/view/ViewPlugin.java" afterPath="$PROJECT_DIR$/src/main/java/org/elasticsearch/plugin/view/ViewPlugin.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/elasticsearch/rest/action/view/RestViewAction.java" afterPath="$PROJECT_DIR$/src/main/java/org/elasticsearch/rest/action/view/RestViewAction.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/elasticsearch/view/ViewContext.java" afterPath="$PROJECT_DIR$/src/main/java/org/elasticsearch/view/ViewContext.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/elasticsearch/view/ViewEngineService.java" afterPath="$PROJECT_DIR$/src/main/java/org/elasticsearch/view/ViewEngineService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/elasticsearch/view/ViewModule.java" afterPath="$PROJECT_DIR$/src/main/java/org/elasticsearch/view/ViewModule.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/elasticsearch/view/ViewResult.java" afterPath="$PROJECT_DIR$/src/main/java/org/elasticsearch/view/ViewResult.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/elasticsearch/view/ViewService.java" afterPath="$PROJECT_DIR$/src/main/java/org/elasticsearch/view/ViewService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/elasticsearch/view/binary/BinaryViewEngineService.java" afterPath="$PROJECT_DIR$/src/main/java/org/elasticsearch/view/binary/BinaryViewEngineService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/elasticsearch/view/mustache/MustacheViewEngineService.java" afterPath="$PROJECT_DIR$/src/main/java/org/elasticsearch/view/mustache/MustacheViewEngineService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resources/init.sh" afterPath="$PROJECT_DIR$/src/test/resources/init.sh" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/org/elasticsearch/test/integration/views/ViewActionTests.java" afterPath="$PROJECT_DIR$/src/test/java/org/elasticsearch/test/integration/views/ViewActionTests.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resources/org/elasticsearch/test/integration/views/config/views/list-of-products.mv" afterPath="$PROJECT_DIR$/src/test/resources/org/elasticsearch/test/integration/views/config/views/list-of-products.mv" />
     </list>
     <ignored path="elasticsearch-view-plugin.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -121,8 +92,8 @@
       <property name="field_breakpoints_groupByClasses" value="true" />
       <property name="method_breakpoints_groupByClasses" value="true" />
       <property name="exception_breakpoints_viewId" value="TABLE" />
-      <property name="exception_breakpoints_groupByClasses" value="true" />
       <property name="field_breakpoints_viewId" value="TABLE" />
+      <property name="exception_breakpoints_groupByClasses" value="true" />
       <property name="method_breakpoints_groupByMethods" value="false" />
     </ui_properties>
   </component>
@@ -131,55 +102,48 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="list-of-products.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/resources/org/elasticsearch/test/integration/views/config/views/list-of-products.html">
+      <file leaf-file-name="ViewContext.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/elasticsearch/view/ViewContext.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="76" column="39" selection-start="2334" selection-end="2334" vertical-scroll-proportion="-46.041668">
+            <state line="30" column="13" selection-start="1164" selection-end="1164" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="e#2580#2596#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ViewActionTests.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/test/java/org/elasticsearch/test/integration/views/ViewActionTests.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="108" column="107" selection-start="5178" selection-end="5178" vertical-scroll-proportion="0.3877551">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="list-of-products.mv" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="RestViewAction.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/elasticsearch/rest/action/view/RestViewAction.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="39" column="106" selection-start="1508" selection-end="1662" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ViewModule.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/elasticsearch/view/ViewModule.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="30" column="13" selection-start="1224" selection-end="1224" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="list-of-products.mv" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/resources/org/elasticsearch/test/integration/views/config/views/list-of-products.mv">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="49" column="60" selection-start="1601" selection-end="1601" vertical-scroll-proportion="0.14096916">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="copyright.mv" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/resources/org/elasticsearch/test/integration/views/config/views/copyright.mv">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="36" selection-start="28" selection-end="28" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="html.mustache" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/resources/config/views/html.mustache">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="17" selection-start="279" selection-end="279" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="image.mustache" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/resources/config/views/image.mustache">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="test.mv" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/resources/config/views/test.mv">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="23" selection-start="23" selection-end="23" vertical-scroll-proportion="0.0">
+            <state line="4" column="19" selection-start="88" selection-end="88" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -198,7 +162,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/org/elasticsearch/view/ViewModule.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/elasticsearch/view/ViewResult.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/elasticsearch/action/view/ViewRequest.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/elasticsearch/view/ViewService.java" />
@@ -211,9 +174,10 @@
         <option value="$PROJECT_DIR$/src/main/java/org/elasticsearch/action/view/TransportViewAction.java" />
         <option value="$PROJECT_DIR$/src/test/resources/config/views/list-of-products.mv" />
         <option value="$PROJECT_DIR$/src/test/resources/config/views/list-of-products.html" />
-        <option value="$PROJECT_DIR$/src/test/java/org/elasticsearch/test/integration/views/ViewActionTests.java" />
         <option value="$PROJECT_DIR$/src/test/resources/org/elasticsearch/test/integration/views/config/views/list-of-products.html" />
         <option value="$PROJECT_DIR$/src/test/resources/org/elasticsearch/test/integration/views/config/views/list-of-products.mv" />
+        <option value="$PROJECT_DIR$/src/main/java/org/elasticsearch/view/ViewContext.java" />
+        <option value="$PROJECT_DIR$/src/test/java/org/elasticsearch/test/integration/views/ViewActionTests.java" />
       </list>
     </option>
   </component>
@@ -266,16 +230,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope">
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="PackagesPane">
         <subPane>
           <PATH>
@@ -292,6 +246,72 @@
       </pane>
       <pane id="ProjectPane">
         <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="elasticsearch-view-plugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="External Libraries" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Maven: org.mvel:mvel2:2.1.3.Final" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mvel2-2.1.3.Final.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="elasticsearch-view-plugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="External Libraries" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Maven: org.mvel:mvel2:2.1.3.Final" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mvel2-2.1.3.Final.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mvel2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="elasticsearch-view-plugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="External Libraries" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Maven: org.mvel:mvel2:2.1.3.Final" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mvel2-2.1.3.Final.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mvel2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
           <PATH>
             <PATH_ELEMENT>
               <option name="myItemId" value="elasticsearch-view-plugin" />
@@ -439,6 +459,70 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="junit" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="elasticsearch-view-plugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="External Libraries" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Maven: junit:junit:4.10" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="junit-4.10.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="org" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="junit" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="runners" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="elasticsearch-view-plugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="External Libraries" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Maven: junit:junit:4.10" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="junit-4.10.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="org" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="junit" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="runners" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="model" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -711,40 +795,6 @@
               <option name="myItemId" value="views" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mappings" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="elasticsearch-view-plugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="elasticsearch-view-plugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resources" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="data" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -939,10 +989,6 @@
               <option name="myItemId" value="view" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mustache" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -967,74 +1013,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="elasticsearch" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="view" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="binary" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="elasticsearch-view-plugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="elasticsearch-view-plugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="elasticsearch" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="view" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="elasticsearch-view-plugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="elasticsearch-view-plugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="elasticsearch" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="view" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1070,6 +1048,16 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1088,9 +1076,9 @@
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.splitter.details.proportions" value="0.2" />
-    <property name="dynamic.classpath" value="false" />
     <property name="options.searchVisible" value="true" />
+    <property name="dynamic.classpath" value="false" />
+    <property name="options.splitter.details.proportions" value="0.2" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -1162,24 +1150,6 @@
         <option name="Maven.BeforeRunTask" enabled="false" />
       </method>
     </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <method>
-        <option name="AntTarget" enabled="false" />
-        <option name="BuildArtifacts" enabled="false" />
-        <option name="Make" enabled="true" />
-        <option name="Maven.BeforeRunTask" enabled="false" />
-      </method>
-    </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
       <module name="" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
@@ -1205,6 +1175,24 @@
       <envs />
       <properties />
       <listeners />
+      <method>
+        <option name="AntTarget" enabled="false" />
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
+        <option name="Maven.BeforeRunTask" enabled="false" />
+      </method>
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
       <method>
         <option name="AntTarget" enabled="false" />
         <option name="BuildArtifacts" enabled="false" />
@@ -1277,8 +1265,8 @@
       <method />
     </configuration>
     <list size="2">
-      <item index="0" class="java.lang.String" itemvalue="Application.elasticsearch-view-plugin" />
-      <item index="1" class="java.lang.String" itemvalue="JUnit.ViewActionTests" />
+      <item index="0" class="java.lang.String" itemvalue="JUnit.ViewActionTests" />
+      <item index="1" class="java.lang.String" itemvalue="Application.elasticsearch-view-plugin" />
     </list>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
@@ -1344,7 +1332,6 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32905984" sideWeight="0.49226806" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4116809" sideWeight="0.8402062" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3974359" sideWeight="0.15528351" order="11" side_tool="true" content_ui="tabs" />
@@ -1356,9 +1343,10 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298969" sideWeight="0.67094016" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39948454" sideWeight="0.67094016" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25419354" sideWeight="0.6837607" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.31623933" sideWeight="0.49226806" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.31623933" sideWeight="0.49226806" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32905984" sideWeight="0.49226806" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32905984" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.6025641" order="5" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -1424,114 +1412,104 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$M2_REPO$/org/elasticsearch/elasticsearch/0.21.0.Beta1-SNAPSHOT/elasticsearch-0.21.0.Beta1-SNAPSHOT-sources.jar!/org/elasticsearch/common/xcontent/XContentHelper.java">
+    <entry file="file://$PROJECT_DIR$/../elasticsearch/src/test/java/org/elasticsearch/test/integration/AbstractNodesTests.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="41" column="13" selection-start="1530" selection-end="1530" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="92" column="104" selection-start="3548" selection-end="3588" vertical-scroll-proportion="0.44526628" />
       </provider>
     </entry>
-    <entry file="jar:///usr/lib/jvm/jdk1.6.0_25/src.zip!/java/util/List.java">
+    <entry file="jar://$M2_REPO$/junit/junit/4.10/junit-4.10-sources.jar!/org/junit/runners/model/FrameworkMethod.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="172" column="47" selection-start="7592" selection-end="7605" vertical-scroll-proportion="0.5271318">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/elasticsearch/view/ViewContext.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="127" column="0" selection-start="4156" selection-end="4156" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/elasticsearch/action/view/TransportViewAction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="189" column="0" selection-start="7949" selection-end="7949" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$M2_REPO$/com/github/tlrx/elasticsearch-test/0.0.7-SNAPSHOT/elasticsearch-test-0.0.7-SNAPSHOT-sources.jar!/com/github/tlrx/elasticsearch/test/EsSetup.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="166" column="31" selection-start="5843" selection-end="5843" vertical-scroll-proportion="-1.5935829">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/elasticsearch/view/ViewEngineService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="17" selection-start="921" selection-end="921" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="44" column="0" selection-start="1322" selection-end="1322" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="jar://$M2_REPO$/junit/junit/4.10/junit-4.10-sources.jar!/org/junit/internal/runners/model/ReflectiveCallable.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="115" selection-start="444" selection-end="444" vertical-scroll-proportion="0.63114756">
+        <state line="14" column="0" selection-start="332" selection-end="332" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/resources/org/elasticsearch/test/integration/views/mappings/product.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="44" column="219" selection-start="1407" selection-end="1435" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/resources/config/views/html.mustache">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="38" column="51" selection-start="1367" selection-end="1367" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/elasticsearch/view/ViewEngineService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="24" column="17" selection-start="921" selection-end="921" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="jar://$M2_REPO$/org/mvel/mvel2/2.1.3.Final/mvel2-2.1.3.Final.jar!/org/mvel2/templates/TemplateRegistry.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="81" selection-start="142" selection-end="142" vertical-scroll-proportion="-1.2">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/elasticsearch/view/mvel/MvelViewEngineService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="36" column="13" selection-start="1472" selection-end="1472" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/elasticsearch/view/ViewService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="73" column="0" selection-start="3010" selection-end="3010" vertical-scroll-proportion="0.0">
+        <state line="40" column="13" selection-start="1716" selection-end="1716" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$M2_REPO$/junit/junit/4.10/junit-4.10-sources.jar!/junit/framework/Assert.java">
+    <entry file="jar://$M2_REPO$/org/elasticsearch/elasticsearch/0.21.0.Beta1-SNAPSHOT/elasticsearch-0.21.0.Beta1-SNAPSHOT.jar!/org/elasticsearch/common/collect/ImmutableMap.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="89" column="23" selection-start="2388" selection-end="2388" vertical-scroll-proportion="0.33259913">
+        <state line="6" column="22" selection-start="269" selection-end="269" vertical-scroll-proportion="-3.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/org/elasticsearch/test/integration/views/ViewActionTests.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/elasticsearch/view/ViewContext.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="114" column="126" selection-start="5437" selection-end="5437" vertical-scroll-proportion="0.5578231">
-          <folding />
+        <state line="30" column="13" selection-start="1164" selection-end="1164" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="e#2580#2596#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/resources/org/elasticsearch/test/integration/views/config/views/list-of-products.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="76" column="39" selection-start="2334" selection-end="2334" vertical-scroll-proportion="-46.041668">
+        <state line="48" column="33" selection-start="1567" selection-end="1567" vertical-scroll-proportion="-0.18604651">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/resources/org/elasticsearch/test/integration/views/config/views/copyright.mv">
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/elasticsearch/rest/action/view/RestViewAction.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="36" selection-start="28" selection-end="28" vertical-scroll-proportion="0.0">
+        <state line="39" column="106" selection-start="1508" selection-end="1662" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/resources/config/views/html.mustache">
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/elasticsearch/view/ViewModule.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="17" selection-start="279" selection-end="279" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/resources/config/views/image.mustache">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/resources/config/views/test.mv">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="23" selection-start="23" selection-end="23" vertical-scroll-proportion="0.0">
+        <state line="30" column="13" selection-start="1224" selection-end="1224" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/resources/org/elasticsearch/test/integration/views/config/views/list-of-products.mv">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="49" column="60" selection-start="1601" selection-end="1601" vertical-scroll-proportion="0.14096916">
+        <state line="4" column="19" selection-start="88" selection-end="88" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/org/elasticsearch/test/integration/views/ViewActionTests.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="108" column="107" selection-start="5178" selection-end="5178" vertical-scroll-proportion="0.3877551">
           <folding />
         </state>
       </provider>
