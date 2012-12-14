@@ -29,9 +29,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static com.github.tlrx.elasticsearch.test.EsSetup.*;
+import static junit.framework.Assert.*;
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
 
 public class ViewActionTests {
 
@@ -44,8 +43,6 @@ public class ViewActionTests {
         esSetup = new EsSetup(ImmutableSettings
                                 .settingsBuilder()
                                     .put("path.conf", "./target/test-classes/org/elasticsearch/test/integration/views/config/")
-                .put("node.local", false)
-                .put("http.enabled", true)
                                     .build());
 
         // Clean all and create test org.elasticsearch.test.integration.views.mappings.data
@@ -55,7 +52,11 @@ public class ViewActionTests {
 
                 createIndex("catalog")
                         .withMapping("product", fromClassPath("org/elasticsearch/test/integration/views/mappings/product.json"))
-                        .withData(fromClassPath("org/elasticsearch/test/integration/views/data/products.json"))
+                        .withData(fromClassPath("org/elasticsearch/test/integration/views/data/products.json")),
+
+                createIndex("manufacturers")
+                        .withMapping("brand", fromClassPath("org/elasticsearch/test/integration/views/mappings/brand.json"))
+                        .withData(fromClassPath("org/elasticsearch/test/integration/views/data/brands.json"))
         );
     }
 
@@ -82,6 +83,15 @@ public class ViewActionTests {
         assertEquals(61752, response.content().length);
     }
 
+    @Test
+    public void testUndefinedView() throws Exception {
+        try {
+            ViewResponse response = esSetup.client().execute(ViewAction.INSTANCE, new ViewRequest("catalog", "product", "1").format("undefined")).get();
+            fail("Exception expected!");
+        } catch (Exception e) {
+            assertEquals("org.elasticsearch.view.exception.ElasticSearchViewNotFoundException: No view [undefined] found for document type [product]", e.getMessage());
+        }
+    }
 
     @Test
     public void testCustomView() throws Exception {
@@ -115,6 +125,56 @@ public class ViewActionTests {
         ViewResponse response = esSetup.client().execute(ViewAction.INSTANCE, new ViewRequest("catalog", "list-of-products-by-size", "1:10")).get();
         assertEquals(fromClassPath("org/elasticsearch/test/integration/views/config/views/list-of-products.html").toString(), new String(response.content(), "UTF-8"));
     }
+
+    @Test
+    public void testCustomViewWithMultipleQueries() throws Exception {
+
+        // Index a custom view
+        esSetup.execute(
+                index("web", "pages", "home")
+                        .withSource("{\n" +
+                                "    \"views\": {\n" +
+                                "        \"default\": {\n" +
+                                "            \"view_lang\": \"mvel\",\n" +
+                                "            \"queries\": [\n" +
+                                "                {\n" +
+                                "                    \"products_with_price_lower_than_50\": {\n" +
+                                "                        \"indices\": \"catalog\",\n" +
+                                "                        \"types\": [\"product\"],\n" +
+                                "                        \"query\" : {\n" +
+                                "                              \"constant_score\" : {\n" +
+                                "                                  \"filter\" : {\n" +
+                                "                                      \"range\" : { \"price\" : { \"to\": 50, \"include_upper\": true } }\n" +
+                                "                                  }\n" +
+                                "                              }\n" +
+                                "                        }\n" +
+                                "                    }\n" +
+                                "                },\n" +
+                                "                {\n" +
+                                "                    \"brands\": {\n" +
+                                "                        \"indices\": \"manufacturers\",\n" +
+                                "                        \"types\": [\"brand\"],\n" +
+                                "                        \"query\" : {\n" +
+                                "                              \"match_all\" : {}\n" +
+                                "                        },\n" +
+                                "                        \"sort\" : [\n" +
+                                "                              { \"name\" : \"asc\" },\n"+
+                                "                              { \"country\" : \"asc\" }\n"+
+                                "                        ],\n"+
+                                "                        \"fields\" : [ \"name\" ]\n"+
+                                "                    }\n" +
+                                "                }\n" +
+                                "            ],\n" +
+                                "            \"view\" : \"@includeNamed{'list-of-products-with-brands'; title='Welcome'}\"\n" +
+                                "        }\n" +
+                                "    }\n" +
+                                "}")
+        );
+
+        ViewResponse response = esSetup.client().execute(ViewAction.INSTANCE, new ViewRequest("web", "pages", "home")).get();
+        assertEquals(fromClassPath("org/elasticsearch/test/integration/views/config/views/list-of-products-with-brands.html").toString(), new String(response.content(), "UTF-8"));
+    }
+
 
     @After
     public void tearDown() throws Exception {

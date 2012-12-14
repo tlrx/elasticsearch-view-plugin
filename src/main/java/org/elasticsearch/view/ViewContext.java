@@ -20,7 +20,9 @@ package org.elasticsearch.view;
 
 import org.elasticsearch.common.collect.ImmutableMap;
 import org.elasticsearch.common.util.concurrent.ConcurrentCollections;
+import org.elasticsearch.index.get.GetField;
 import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHitField;
 import org.elasticsearch.search.SearchHits;
 
 import java.util.ArrayList;
@@ -37,6 +39,7 @@ public class ViewContext {
     private String id;
     private Long version;
     private Map<String, Object> source;
+    private Map<String, Object> fields;
     private Map<String, SearchHits> queries;
 
     public ViewContext(String lang, String view) {
@@ -108,6 +111,7 @@ public class ViewContext {
             sourceAsMap.putAll(this.source);
             builder.put("_source", sourceAsMap.build());
         }
+
         if (this.queries() != null) {
             ImmutableMap.Builder<String, Object> queryHitsAsMap = ImmutableMap.builder();
             for (String query : this.queries().keySet()) {
@@ -120,7 +124,20 @@ public class ViewContext {
                     hitProperties.put("_type", hit.type());
                     hitProperties.put("_id", hit.id());
                     hitProperties.put("_version", hit.version());
-                    hitProperties.put("_source", hit.sourceAsMap());
+
+                    Map<String, Object> sourceAsMap = hit.sourceAsMap();
+                    if(sourceAsMap != null){
+                        hitProperties.put("_source", hit.sourceAsMap());
+                    }
+
+                    Map<String, SearchHitField> fields = hit.fields();
+                    if (fields != null) {
+                        Map<String, Object> fieldsMap = new HashMap<String, Object>();
+                        for (SearchHitField field : hit.fields().values()) {
+                            fieldsMap.put(field.name(), field.value());
+                        }
+                        hitProperties.put("fields", fieldsMap);
+                    }
                     hits.add(hitProperties.build());
                 }
 

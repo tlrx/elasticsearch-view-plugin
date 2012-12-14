@@ -42,27 +42,44 @@
     </div>
 
     <div class="container">
-        <h1>List of products with scale 1:10</h1>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Code</th>
-                    <th>Name</th>
-                    <th>Brand</th>
-                    <th>Year</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach{item : _queries.products_with_size_1_10}
-                    <tr>
-                        <td>@{item._source.code}</td>
-                        <td>@{item._source.name}</td>
-                        <td>@{item._source.brand}</td>
-                        <td>@{item._source.since}</td>
-                    </tr>
-                @end{}
-            </tbody>
-        </table>
+
+        <div class="row">
+
+            <div class="span3">
+                <ul class="nav nav-list bs-docs-sidenav">
+                    @foreach{brand : _queries.brands}
+                        <li>
+                            <a href="#"><i class="icon-chevron-right"></i> @{brand.fields.name}</a>
+                        </li>
+                    @end{}
+                </ul>
+            </div>
+
+            <div class="span9">
+                <h1>Top products</h1>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>Brand</th>
+                            <th>Year</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach{item : _queries.products_with_price_lower_than_50}
+                            <tr>
+                                <td>@{item._source.code}</td>
+                                <td>@{item._source.name}</td>
+                                <td>@{item._source.brand}</td>
+                                <td>@{item._source.since}</td>
+                            </tr>
+                        @end{}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
     </div>
 
   </body>

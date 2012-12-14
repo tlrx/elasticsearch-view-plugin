@@ -18,10 +18,10 @@
  */
 package org.elasticsearch.plugin.view;
 
-import com.google.common.collect.Lists;
 import org.elasticsearch.action.ActionModule;
 import org.elasticsearch.action.view.TransportViewAction;
 import org.elasticsearch.action.view.ViewAction;
+import org.elasticsearch.common.collect.Lists;
 import org.elasticsearch.common.inject.Module;
 import org.elasticsearch.plugins.AbstractPlugin;
 import org.elasticsearch.rest.RestModule;
@@ -39,7 +39,7 @@ public class ViewPlugin extends AbstractPlugin {
     }
 
     public String name() {
-        return "elasticsearch-view-plugin";
+        return "view-plugin";
     }
 
     @Override

@@ -26,10 +26,12 @@ import org.elasticsearch.client.Client;
 import org.elasticsearch.common.inject.Inject;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.rest.*;
+import org.elasticsearch.view.exception.ElasticSearchViewNotFoundException;
 
 import java.io.IOException;
 
 import static org.elasticsearch.rest.RestRequest.Method.GET;
+import static org.elasticsearch.rest.RestStatus.NOT_FOUND;
 
 public class RestViewAction extends BaseRestHandler {
 
@@ -63,7 +65,11 @@ public class RestViewAction extends BaseRestHandler {
 
             public void onFailure(Throwable e) {
                 try {
-                    channel.sendResponse(new XContentThrowableRestResponse(request, e));
+                    if (e instanceof ElasticSearchViewNotFoundException) {
+                        channel.sendResponse(new XContentThrowableRestResponse(request, NOT_FOUND, e));
+                    } else {
+                        channel.sendResponse(new XContentThrowableRestResponse(request, e));
+                    }
                 } catch (IOException e1) {
                     logger.error("Failed to send failure response", e1);
                 }

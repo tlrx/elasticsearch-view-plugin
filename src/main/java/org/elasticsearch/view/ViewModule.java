@@ -18,15 +18,13 @@
  */
 package org.elasticsearch.view;
 
-import java.util.List;
-
+import org.elasticsearch.common.collect.Lists;
 import org.elasticsearch.common.inject.AbstractModule;
 import org.elasticsearch.common.inject.multibindings.Multibinder;
 import org.elasticsearch.view.binary.BinaryViewEngineService;
-import org.elasticsearch.view.mustache.MustacheViewEngineService;
-
-import com.google.common.collect.Lists;
 import org.elasticsearch.view.mvel.MvelViewEngineService;
+
+import java.util.List;
 
 public class ViewModule extends AbstractModule {
 
@@ -40,7 +38,6 @@ public class ViewModule extends AbstractModule {
 	protected void configure() {
 		Multibinder<ViewEngineService> multibinder = Multibinder.newSetBinder(binder(), ViewEngineService.class);
         multibinder.addBinding().to(MvelViewEngineService.class);
-        multibinder.addBinding().to(MustacheViewEngineService.class);
         multibinder.addBinding().to(BinaryViewEngineService.class);
 		for (Class<? extends ViewEngineService> viewEngine : viewEngines) {
 			multibinder.addBinding().to(viewEngine);

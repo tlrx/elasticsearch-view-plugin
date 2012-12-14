@@ -26,7 +26,8 @@ public class ViewRequest extends SingleShardOperationRequest<ViewRequest> {
 
     private String type;
     private String id;
-    private String format = "default";
+    private String format;
+    public static final String DEFAULT_VIEW = "default";
 
     ViewRequest() {
     }

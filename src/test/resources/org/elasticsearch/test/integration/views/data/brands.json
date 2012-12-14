@@ -1,0 +1,10 @@
+{ "index" : { "_index" : "manufacturers", "_type" : "brand", "_id" : "1" } }
+{ "name" : "Renault", "country": "FR"}
+{ "index" : { "_index" : "manufacturers", "_type" : "brand", "_id" : "2" } }
+{ "name" : "Honda", "country": "JP"}
+{ "index" : { "_index" : "manufacturers", "_type" : "brand", "_id" : "3" } }
+{ "name" : "Ducati", "country": "IT"}
+{ "index" : { "_index" : "manufacturers", "_type" : "brand", "_id" : "4" } }
+{ "name" : "Triumph", "country": "UK"}
+
+
