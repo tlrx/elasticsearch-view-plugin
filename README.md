@@ -369,12 +369,27 @@ img render_html_list.png
 These kind of view are indexed as normal ElasticSearch docs.
 
 
-## Using Mustache
+## Going further...
+
+### Using Mustache
 
 The plugin [elasticsearch-view-mustache-plugin](https://github.com/tlrx/elasticsearch-view-mustache-plugin) adds
 [Mustache](http://mustache.github.com/) as templating language for views.
 
 Mustache is a great templating engine that supports template encapsulation.
+
+### Rewriting URL with Apache2
+
+Apache2 server with mod_proxy and mod_rewrite can be used to redirect ElasticSearch Views Plugin URLs with some configuration:
+
+```
+RewriteEngine on
+RewriteRule ^catalog/(.*)$ http://localhost:9200/_view/catalog/$1 [P,L]
+```
+
+This way, the URL `http://www.domain.com/catalog/list-of-products-by-size/1:10` points to `http://localhost:9200/_view/catalog/list-of-products-by-size/1:10`.
+
+
 
 Hope this plugin will be as useful as it is for us :)
 
