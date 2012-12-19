@@ -2,6 +2,11 @@ target/
 .idea/
 elasticsearch-view-plugin.iml
 *.class
+.classpath
+.project
+.settings/
+elasticsearch-view-plugin.iml
+
 
 # Package Files #
 *.jar
