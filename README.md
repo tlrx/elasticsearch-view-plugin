@@ -41,10 +41,8 @@ Par exemple, pour accéder à un rendu HTML de notre produit:
 
 (exemple HTML)
 
-Le plugin permet aussi de créer plusieurs formats de vue pour un même type de document:
-
-
-Ou encore de créer une vue sur-mesure pour afficher le résultat de l'exécution de requêtes:
+Le plugin permet aussi de créer plusieurs formats de vue pour un même type de document, éventuellement basé sur des
+scripts prédéfinis, ou encore de créer une vue sur-mesure pour afficher le résultat de l'exécution de requêtes:
 
 (exemple HTML).
 
@@ -75,7 +73,7 @@ curl -XPUT 'http://localhost:9200/catalog/product/1' -d '
    "since": "1969",
    "price": 48.34,
    "description": "This replica features working kickstand, front suspension, gear-shift lever, footbrake lever, drive chain, wheels and steering.",
-   "scale": "1:10"
+   "scale": "10"
 }'
 
 ```
@@ -160,13 +158,15 @@ curl -XPUT 'http://localhost:9200/catalog/product/1' -d '
    "since": "1969",
    "price": 48.34,
    "description": "This replica features working kickstand, front suspension, gear-shift lever, footbrake lever, drive chain, wheels and steering.",
-   "scale": "1:10",
+   "scale": "10",
    "picture": "/9j/4AAQSkZJRgABAQAAAQABAAD//gA7..."
 }'
 
 ```
 
-And define two new views:
+The picture field contains a base64 encoded image of Harley Davidson's logo.
+
+We can now define two more views:
 * logo: which renders the picture as binary content
 * full: which renders the document as HTML content
 
@@ -192,7 +192,7 @@ curl -XPUT 'http://localhost:9200/catalog/product/_mapping' -d '
                 },
                 "full": {
                     "view_lang": "mvel",
-                    "view": "<div id=\"product-@{_id}\"><img src=\"/_view/catalog/product/@{_id}/logo\"/><h2>Detail of @{_source.name.toUpperCase()}</h2><p>Year: @{_source.since}, price: @{_source.price}€</p><p>@{_source.description}</p><p>@includeNamed{\"copyright\"}</p></div>"
+                    "view": "<div id=\"product-@{_id}\"><img src=\"/_view/catalog/product/@{_id}/logo\"/><h2>Detail of @{_source.name.toUpperCase()}</h2><p>Year: @{_source.since}, price: @{_source.price}€</p><p>@{_source.description}</p><p>© Copyright @{_source.brand}</p></div>"
                 }
             }
         }
@@ -204,6 +204,183 @@ The URL `http://localhost:9200/_view/catalog/product/1/logo` can be used to get 
  `http://localhost:9200/_view/catalog/product/1/full` renders the full HTML view:
 
 image render_html.png
+
+
+
+## Using preloaded templates
+
+Similar to the [scripting module](http://www.elasticsearch.org/guide/reference/modules/scripting.html), the ElasticSearch
+View Plugin supports predefined templates scripts.
+
+The scripts can be placed under the `config/views` directory and then referencing them by the script name. The way to
+reference a script differs according to the view language.
+
+For example, we can create the file  `config/views/copyright.mv` with the following content:
+```
+<p>© Copyright @{_source.brand}</p>
+```
+
+The `.mv` extension indicates that the file contains a template in MVEL language.
+
+After a cluster restart, we will be able to update the `full` view in order to use the preloaded template script:
+```
+...
+     "full": {
+         "view_lang": "mvel",
+         "view": "<div id=\"product-@{_id}\"><img src=\"/_view/catalog/product/@{_id}/logo\"/><h2>Detail of @{_source.name.toUpperCase()}</h2><p>Year: @{_source.since}, price: @{_source.price}€</p><p>@{_source.description}</p>@includeNamed{\"copyright\"}</div>"
+     }
+...
+ ```
+
+## Creating complete views from queries
+
+The plugin allows to create custom views from query hits. Everytime such a view is requested, a set of predefined queries
+are executed and the results are used to create the view.
+
+This kind of view are really powerful and are a simple way to create complete web pages.
+
+First, let's create a more complex template called `list-of-products` and stored in the file `config/views/list-of-products.mv`:
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>@{title}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">Catalog</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="#">List of products</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+        <h1>List of products with scale 1:10</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Name</th>
+                    <th>Brand</th>
+                    <th>Year</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach{item : _queries.products_with_size_1_10}
+                    <tr>
+                        <td>@{item._source.code}</td>
+                        <td>@{item._source.name}</td>
+                        <td>@{item._source.brand}</td>
+                        <td>@{item._source.since}</td>
+                    </tr>
+                @end{}
+            </tbody>
+        </table>
+    </div>
+
+  </body>
+</html>
+```
+
+Next, we can create the view:
+```
+curl -XPUT "http://localhost:9200/catalog/list-of-products-by-size/1:10" -d "{
+    \"views\":{
+        \"default\":{
+            \"view_lang\": \"mvel\",
+            \"queries\": {
+                \"products_with_size_1_10\": {
+                    \"indices\": \"catalog\",
+                    \"types\": [\"product\"],
+                    \"query\" : {
+                          \"constant_score\" : {
+                              \"filter\" : {
+                                  \"term\" : { \"scale\" : \"10\"}
+                              }
+                          }
+                    }
+                }
+            },
+            \"view\" : \"@includeNamed{'list-of-products'; title='List of products'}\"
+        }
+    }
+}"
+```
+
+This view is called `default` (but could have another name) and uses the `list-of-products` template to render a list
+of products.
+
+The list of products is defined by the `products_with_size_1_10` query in the `queries` field of the view. This query
+selects 10 products that have a scale of 1:10.
+
+If you look closely at the previous template, you can see the following code:
+```
+@foreach{item : _queries.products_with_size_1_10}
+    <tr>
+        <td>@{item._source.code}</td>
+        <td>@{item._source.name}</td>
+        <td>@{item._source.brand}</td>
+        <td>@{item._source.since}</td>
+    </tr>
+@end{}
+```
+
+This code uses a MVEL templating syntax `@foreach{}...@end{}` that iterates over the hits provided by the
+`products_with_size_1_10` query in order to construct a dynamic table of products that will be rendered in the
+final HTML page. Of course, multiple queries can be used in the same view.
+
+The result is available at `http://localhost:9200/_view/catalog/list-of-products-by-size/1:10` and looks like:
+
+img render_html_list.png
+
+These kind of view are indexed as normal ElasticSearch docs.
+
+
+## Using Mustache
+
+The plugin [elasticsearch-view-mustache-plugin](https://github.com/tlrx/elasticsearch-view-mustache-plugin) adds
+[Mustache](http://mustache.github.com/) as templating language for views.
+
+Mustache is a great templating engine that supports template encapsulation.
+
+Hope this plugin will be as useful as it is for us :)
+
+
+
+
+
+
+
 
 
 
