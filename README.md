@@ -50,6 +50,9 @@ scripts prédéfinis, ou encore de créer une vue sur-mesure pour afficher le r�
 
 ## Installing the plugin
 
+|_. elasticsearch-view-plugin	|_. ElasticSearch|
+|   master (0.0.1)      |     0.20.1     |
+
 In order to install the plugin, simply run:
 
 ```
