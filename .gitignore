@@ -1,3 +1,9 @@
 target/
 .idea/
 elasticsearch-view-plugin.iml
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
