@@ -109,6 +109,6 @@ public class ViewService extends AbstractComponent {
 
     public ViewResult render(ViewContext context) {
         ViewEngineService viewEngineService = viewEngines.get(context.lang() == null ? defaultViewLang : context.lang());
-        return new ViewResult(viewEngineService.contentType(), viewEngineService.render(context.view(), context.varsAsMap()));
+        return new ViewResult(context.contentType() == null ? viewEngineService.contentType() : context.contentType(), viewEngineService.render(context.view(), context.varsAsMap()));
     }
 }

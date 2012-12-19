@@ -190,7 +190,7 @@ public class TransportViewAction extends TransportShardSingleOperationAction<Vie
                         Map mapCandidate = (Map) candidate;
 
                         // ViewContext holds the org.elasticsearch.test.integration.views.mappings.data for view rendering
-                        ViewContext viewContext = new ViewContext((String) mapCandidate.get("view_lang"), (String) mapCandidate.get("view"));
+                        ViewContext viewContext = new ViewContext((String) mapCandidate.get("view_lang"), (String) mapCandidate.get("view"), (String) mapCandidate.get("content_type"));
 
                         Object queries = mapCandidate.get("queries");
                         Map<String, Object> mapQueries = null;

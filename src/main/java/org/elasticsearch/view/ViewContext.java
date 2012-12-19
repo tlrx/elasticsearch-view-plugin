@@ -33,6 +33,7 @@ import java.util.Map;
 public class ViewContext {
 
     private String lang;
+    private String contentType;
     private String view;
     private String index;
     private String type;
@@ -42,13 +43,18 @@ public class ViewContext {
     private Map<String, Object> fields;
     private Map<String, SearchHits> queries;
 
-    public ViewContext(String lang, String view) {
+    public ViewContext(String lang, String view, String contentType) {
         this.lang = lang;
         this.view = view;
+        this.contentType = contentType;
     }
 
     public String lang() {
         return lang;
+    }
+
+    public String contentType() {
+        return contentType;
     }
 
     public String view() {
