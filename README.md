@@ -1,5 +1,7 @@
 # Introducing the ElasticSearch View Plugin
 
+The ElasticSearch View Plugin provides a simple way to render ElasticSearch documents in HTML, XML or text. This plugin can also be used to generate web pages that show a list of documents based on oredefined queries.
+
 Elasticsearch provides a fast and simple way to retrieve a document with the [GET API](http://www.elasticsearch.org/guide/reference/api/get.html):
 ```
 curl -XGET 'http://localhost:9200/catalog/product/1'
