@@ -1,6 +1,6 @@
 # Introducing the ElasticSearch View Plugin
 
-Elasticsearch provides a fast and simple way to retrieve a document with the [GET API](http://www.elasticsearch.org/guide/reference/api/get.html).
+Elasticsearch provides a fast and simple way to retrieve a document with the [GET API](http://www.elasticsearch.org/guide/reference/api/get.html):
 ```
 curl -XGET 'http://localhost:9200/catalog/product/1'
 ```
@@ -22,34 +22,33 @@ Until now, this API only allows to get the document in JSON format:
 }
 ```
 
-Although this format is really useful, it is not directly presentable to a final user. It is more dedicated to
-applications which are in charge of the
-The goal of these applications is to generate a graphic result of one or more documents for instance on HTML page. They need a specific executive environment (...) which is necessary to install, configure and maintain. as well as regular deliveries of the application when the graphic content of one document is modified.
+Although this format is really useful, it is not directly presentable to a final user. The JSON format is more dedicated
+to be used by third party applications located at client or server side. These applications are in charge of
+parsing the JSON content, extracting meaningful data and rendering them in a more graphical way, for instance within a
+HTML page. With ElasticSearch, anyone who wants to have a graphical rendering of these documents shall install, configure
+and maintain such an application, which can become quite complex and require regular redelivery every time the graphic
+content of a document is modified
 
-Bien que très pratique, ce format n'est pas directement présentable à un utilisateur final. Il est plutot destiné à être
-exploité par des applications tierces dont le rôle est de générer un rendu graphique d'un ou plusieurs documents, par
-exemple sur une page HTML. Ces applications tierces nécessitent un environnement d'exécution dédié (serveur
-d'application JEE, serveur Apache/IIS etc) qu'il faut installer, configurer et maintenir, ainsi que des livraisons
-régulières de l'application lorsque le rendu graphique d'un document est modifié.
+The ElasticSearch View Plugin can be used when you don't want to develop a dedicated application or when you wish to
+control not only the document searches but also the way the document are displayed.
 
-Lorsqu'il n'est pas souhaitable d'utiliser une telle application, ou lorsque l'on souhaite contrôler non seulement les
-recherches de documents mais aussi leur rendu graphique, il est possible d'utiliser le plugin "ElasticSearch View Plugin".
+This plugin allows to create views using different templating engines (for now [MVEL](http://mvel.codehaus.org/MVEL+2.0+Basic+Templating)
+and [Mustache](http://mustache.github.com/) can be used) in order to generate a HTML (or XML, or anything
+which is text) display of your document and access to it threw an URL.
 
-Ce plugin permet de créer des vues en utilisant différents systèmes de templates (actuellement MVEL et Mustache sont
-supportés) afin de générer des rendus HTML (ou XML, Markdown ou n'importe quoi tant que c'est du texte) et d'y accéder
-par une simple URL.
+For example, the plugin can be used to generate a HTML page that displays our product:
+http://localhost:9200/_view/catalog/product/1
 
-Par exemple, pour accéder à un rendu HTML de notre produit:
-````
-````
+![HTML view of document #1](https://raw.github.com/tlrx/elasticsearch-view-plugin/gh-pages/samples/render_html.png)
 
-(exemple HTML)
+The plugin can also be used to create several formats of views for a same type of document, if necessary with the help of
+predefined scripts. It can also be used to generate a specific view to show the results of predefined search queries:
 
-Le plugin permet aussi de créer plusieurs formats de vue pour un même type de document, éventuellement basé sur des
-scripts prédéfinis, ou encore de créer une vue sur-mesure pour afficher le résultat de l'exécution de requêtes:
+http://localhost:9200/_view/web/pages/home
+![HTML view of document #1](https://raw.github.com/tlrx/elasticsearch-view-plugin/gh-pages/samples/render_html_list_brand.png)
 
-(exemple HTML).
-
+In this article, we explain how to install and configure the ElasticSearch View Plugin in order to generate HTML and XML
+views of documents indexed in ElasticSearch.
 
 
 ## Installing the plugin
@@ -247,7 +246,7 @@ Preloaded templates are great candidates for code o text that are used in mulitp
 ## Creating complete views from queries
 
 The plugin allows to create custom views from query hits. Everytime such a view is requested, a set of predefined queries
-are executed and the results are used to create the view. Such views are stored in ElasticSearch as documents.
+are executed and the results are used to create the view. Such views are stored in ElasticSearch as standard documents.
 
 This kind of view is really powerful and are a simple way to create complete web pages.
 
