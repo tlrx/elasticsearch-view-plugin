@@ -1,43 +1,36 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
+
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Elasticsearch-view-plugin by tlrx</title>
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="javascripts/respond.js"></script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <!--[if lt IE 8]>
-    <link rel="stylesheet" href="stylesheets/ie.css">
-    <![endif]-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Elasticsearch-view-plugin : " />
 
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Elasticsearch-view-plugin</title>
   </head>
+
   <body>
-      <div id="header">
-        <nav>
-          <li class="fork"><a href="https://github.com/tlrx/elasticsearch-view-plugin">View On GitHub</a></li>
-          <li class="downloads"><a href="https://github.com/tlrx/elasticsearch-view-plugin/zipball/master">ZIP</a></li>
-          <li class="downloads"><a href="https://github.com/tlrx/elasticsearch-view-plugin/tarball/master">TAR</a></li>
-          <li class="title">DOWNLOADS</li>
-        </nav>
-      </div><!-- end header -->
 
-    <div class="wrapper">
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/tlrx/elasticsearch-view-plugin">View on GitHub</a>
 
-      <section>
-        <div id="title">
-          <h1>Elasticsearch-view-plugin</h1>
-          <p></p>
-          <hr>
-          <span class="credits left">Project maintained by <a href="https://github.com/tlrx">tlrx</a></span>
-          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></span>
-        </div>
+          <h1 id="project_title">Elasticsearch-view-plugin</h1>
+          <h2 id="project_tagline"></h2>
 
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/tlrx/elasticsearch-view-plugin/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/tlrx/elasticsearch-view-plugin/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
         <h1>Introducing the ElasticSearch View Plugin</h1>
 
 <p>The ElasticSearch View Plugin provides a simple way to render ElasticSearch documents in HTML, XML or text. This plugin can also be used to generate web pages that show a list of documents based on oredefined queries.</p>
@@ -81,7 +74,7 @@ which is text) display of your document and access to it threw an URL.</p>
 <p>For example, the plugin can be used to generate a HTML page that displays our product:
 http://localhost:9200/_view/catalog/product/1</p>
 
-<p><img src="https://raw.github.com/tlrx/elasticsearch-view-plugin/gh-pages/samples/render_html.png" alt="HTML view of document #1"></p>
+<p><img src="samples/render_html.png" alt="HTML view of document #1"></p>
 
 <p>The plugin can also be used to create several formats of views for a same type of document, if necessary with the help of
 predefined scripts. It can also be used to generate a specific view to show the results of predefined search queries:</p>
@@ -433,9 +426,17 @@ RewriteRule ^catalog/(.*)$ http://localhost:9200/_view/catalog/$1 [P,L]
 
 <p>We hope that this plugin will be as useful for you as it is for us, and we welcome your feedback and comments about this new plugin.</p>
       </section>
-
     </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Elasticsearch-view-plugin maintained by <a href="https://github.com/tlrx">tlrx</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
     
+
   </body>
 </html>
