@@ -1,0 +1,441 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Elasticsearch-view-plugin by tlrx</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/tlrx/elasticsearch-view-plugin">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/tlrx/elasticsearch-view-plugin/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/tlrx/elasticsearch-view-plugin/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Elasticsearch-view-plugin</h1>
+          <p></p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/tlrx">tlrx</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h1>Introducing the ElasticSearch View Plugin</h1>
+
+<p>The ElasticSearch View Plugin provides a simple way to render ElasticSearch documents in HTML, XML or text. This plugin can also be used to generate web pages that show a list of documents based on oredefined queries.</p>
+
+<p>Elasticsearch provides a fast and simple way to retrieve a document with the <a href="http://www.elasticsearch.org/guide/reference/api/get.html">GET API</a>:</p>
+
+<pre><code>curl -XGET 'http://localhost:9200/catalog/product/1'
+</code></pre>
+
+<p>Until now, this API only allows to get the document in JSON format:</p>
+
+<pre><code>{
+    "_index": "catalog",
+    "_type": "product",
+    "_id": "1",
+    "_version": 1,
+    "exists": true,
+    "_source": {
+        "name": "1969 Harley Davidson Ultimate Chopper",
+        "type": "Motorcycles",
+        "brand": "Harley Davidson",
+        ...
+    }
+}
+</code></pre>
+
+<p>Although this format is really useful, it is not directly presentable to a final user. The JSON format is more dedicated
+to be used by third party applications located at client or server side. These applications are in charge of
+parsing the JSON content, extracting meaningful data and rendering them in a more graphical way, for instance within a
+HTML page. With ElasticSearch, anyone who wants to have a graphical rendering of these documents shall install, configure
+and maintain such an application, which can become quite complex and require regular redelivery every time the graphic
+content of a document is modified</p>
+
+<p>The ElasticSearch View Plugin can be used when you don't want to develop a dedicated application or when you wish to
+control not only the document searches but also the way the document are displayed.</p>
+
+<p>This plugin allows to create views using different templating engines (for now <a href="http://mvel.codehaus.org/MVEL+2.0+Basic+Templating">MVEL</a>
+and <a href="http://mustache.github.com/">Mustache</a> can be used) in order to generate a HTML (or XML, or anything
+which is text) display of your document and access to it threw an URL.</p>
+
+<p>For example, the plugin can be used to generate a HTML page that displays our product:
+http://localhost:9200/_view/catalog/product/1</p>
+
+<p><img src="tlrx.github.com/elasticsearch-view-plugin/samples/render_html.png" alt="HTML view of document #1"></p>
+
+<p>The plugin can also be used to create several formats of views for a same type of document, if necessary with the help of
+predefined scripts. It can also be used to generate a specific view to show the results of predefined search queries:</p>
+
+<p>http://localhost:9200/_view/web/pages/home
+<img src="https://raw.github.com/tlrx/elasticsearch-view-plugin/gh-pages/samples/render_html_list_brand.png" alt="HTML view of document #1"></p>
+
+<p>In this article, we explain how to install and configure the ElasticSearch View Plugin in order to generate HTML and XML
+views of documents indexed in ElasticSearch.</p>
+
+<h2>Installing the plugin</h2>
+
+<p>The plugin can be installed as any other ElasticSearch's plugins:</p>
+
+<pre><code>bin/plugin -install tlrx/elasticsearch-view-plugin/0.0.1
+
+</code></pre>
+
+<p>The current version of the plugin is compatible with <a href="http://www.elasticsearch.org/download/2012/12/07/0.20.1.html">ElasticSearch 0.20.1</a>.</p>
+
+<h2>Creating views for existing documents</h2>
+
+<p>Let's imagine that we have a <code>catalog</code> index and few documents of <code>product</code> type:</p>
+
+<pre><code>curl -XPUT 'http://localhost:9200/catalog/product/1' -d '
+{
+   "name": "1969 Harley Davidson Ultimate Chopper",
+   "type": "Motorcycles",
+   "brand": "Harley Davidson",
+   "code": "S10_1678",
+   "since": "1969",
+   "price": 48.34,
+   "description": "This replica features working kickstand, front suspension, gear-shift lever, footbrake lever, drive chain, wheels and steering.",
+   "scale": "10"
+}'
+
+</code></pre>
+
+<p>ElasticSearch View Plugin uses the mapping's <a href="http://www.elasticsearch.org/guide/reference/mapping/meta.html">meta data</a>
+to store all the views that are associated with a specific document type. Each view has a unique name, a scripting language,
+a content and eventually a content type.</p>
+
+<p>Be careful, as the <a href="http://www.elasticsearch.org/guide/reference/api/update.html">Update API</a>, the <code>_source</code> field need
+to be enabled for this feature to work.</p>
+
+<p>First, we can create a basic view using the <a href="http://mvel.codehaus.org/MVEL+2.0+Basic+Templating">MVEL templating</a> language:</p>
+
+<pre><code>curl -XPUT 'http://localhost:9200/catalog/product/_mapping' -d '
+{
+    "product": {
+        "_meta": {
+            "views": {
+                "default": {
+                    "view_lang": "mvel",
+                    "view": "Rendering the document #@{_id} in version @{_version} of type @{_type} from index @{_index}"
+                }
+            }
+        }
+    }
+}'
+</code></pre>
+
+<p>The previous command creates a view called <code>default</code>. The property <code>view_lang</code> can be used to specify the templating
+engine to use (default is <code>mvel</code>) whereas the <code>view</code> property holds the content of the view. When needed, a specific <code>content_type</code>
+can be set. Note that the view named <code>default</code> will be used by default to render the documents of type <code>product</code>.</p>
+
+<p>In MVEL, the coordinates of the document are available with <code>@{_id}</code>, <code>@{_type}</code> and <code>@{_index}</code> instructions. The original
+<code>_source</code> of the document can be accessed with <code>@{_source._x_}</code> where <em>x</em> is a document property name.</p>
+
+<p>Now the view is created, opening the URL <code>http://localhost:9200/_view/catalog/product/1</code> in a web browser will trigger
+the rendering of document with id 1. The result looks like:</p>
+
+<p><img src="https://raw.github.com/tlrx/elasticsearch-view-plugin/gh-pages/samples/render_default.png" alt="Default view for product #1"></p>
+
+<p>Simple, no?</p>
+
+<h3>Using multiple views</h3>
+
+<p>In most use cases, a unique view is not sufficient. That's why the plugins allows to define many views for the same type of document,
+ allowing differents renderings of the same document:</p>
+
+<pre><code>curl -XPUT 'http://localhost:9200/catalog/product/_mapping' -d '
+{
+    "product": {
+        "_meta": {
+            "views": {
+                "default": {
+                    "view_lang": "mvel",
+                    "view": "Rendering the document #@{_id} in version @{_version} of type @{_type} from index @{_index}"
+                },
+                "xml": {
+                    "view_lang": "mvel",
+                    "content_type": "text/xml",
+                    "view": "&lt;?xml version=\"1.0\" encoding=\"UTF-8\"?&gt;&lt;product id=\"@{_id}\"&gt;&lt;name&gt;@{_source.name}&lt;/name&gt;&lt;brand&gt;@{_source.brand}&lt;/brand&gt;&lt;/product&gt;"
+                }
+            }
+        }
+    }
+}'
+</code></pre>
+
+<p>This way the URL <code>http://localhost:9200/_view/catalog/product/1/xml</code> can be used to access to the XML view of document 1:</p>
+
+<p><img src="https://raw.github.com/tlrx/elasticsearch-view-plugin/gh-pages/samples/render_xml.png" alt="XML view for product #1"></p>
+
+<h3>Rendering binary fields</h3>
+
+<p>If the document contains a <a href="http://www.elasticsearch.org/guide/reference/mapping/core-types.html">binary field</a>, the <code>binary</code>
+view language can be used to get an octet stream corresponding to the field value.</p>
+
+<p>To illustrate that, we can add a new picture field to document 1 (the full JSON content is available on <a href="https://gist.github.com/4337853">gist</a>):</p>
+
+<pre><code>curl -XPUT 'http://localhost:9200/catalog/product/1' -d '
+{
+   "name": "1969 Harley Davidson Ultimate Chopper",
+   "type": "Motorcycles",
+   "brand": "Harley Davidson",
+   "code": "S10_1678",
+   "since": "1969",
+   "price": 48.34,
+   "description": "This replica features working kickstand, front suspension, gear-shift lever, footbrake lever, drive chain, wheels and steering.",
+   "scale": "10",
+   "picture": "/9j/4AAQSkZJRgABAQAAAQABAAD//gA7..."
+}'
+
+</code></pre>
+
+<p>The picture field contains a base64 encoded image of the Harley Davidson's logo.</p>
+
+<p>We can now define two more views:</p>
+
+<ul>
+<li>
+<strong>logo</strong>: which renders the picture as binary content</li>
+<li>
+<strong>full</strong>: which renders the document as  HTML block</li>
+</ul><pre><code>curl -XPUT 'http://localhost:9200/catalog/product/_mapping' -d '
+{
+    "product": {
+        "_meta": {
+            "views": {
+                "default": {
+                    "view_lang": "mvel",
+                    "view": "Rendering the document #@{_id} in version @{_version} of type @{_type} from index @{_index}"
+                },
+                "xml": {
+                    "view_lang": "mvel",
+                    "content_type": "text/xml",
+                    "view": "&lt;?xml version=\"1.0\" encoding=\"UTF-8\"?&gt;&lt;product id=\"@{_id}\"&gt;&lt;name&gt;@{_source.name}&lt;/name&gt;&lt;brand&gt;@{_source.brand}&lt;/brand&gt;&lt;/product&gt;"
+                },
+                "logo": {
+                    "view_lang": "binary",
+                    "view": "_source.picture"
+                },
+                "full": {
+                    "view_lang": "mvel",
+                    "view": "&lt;div id=\"product-@{_id}\"&gt;&lt;img src=\"/_view/catalog/product/@{_id}/logo\"/&gt;&lt;h2&gt;Detail of @{_source.name.toUpperCase()}&lt;/h2&gt;&lt;p&gt;Year: @{_source.since}, price: @{_source.price}€&lt;/p&gt;&lt;p&gt;@{_source.description}&lt;/p&gt;&lt;p&gt;© Copyright @{_source.brand}&lt;/p&gt;&lt;/div&gt;"
+                }
+            }
+        }
+    }
+}'
+</code></pre>
+
+<p>The URL <code>http://localhost:9200/_view/catalog/product/1/logo</code> can be used to get the picture of the product, whereas
+ <code>http://localhost:9200/_view/catalog/product/1/full</code> renders the full HTML view:</p>
+
+<p><img src="https://raw.github.com/tlrx/elasticsearch-view-plugin/gh-pages/samples/render_html.png" alt="HTML view of document #1"></p>
+
+<h2>Using preloaded templates</h2>
+
+<p>Similar to the <a href="http://www.elasticsearch.org/guide/reference/modules/scripting.html">scripting module</a>, the ElasticSearch
+View Plugin supports predefined templates scripts.</p>
+
+<p>The scripts must be placed under the <code>config/views</code> directory and then referencing them by the script name. The way to
+reference a script differs according to the view language.</p>
+
+<p>For example, we can create the file  <code>config/views/copyright.mv</code> with the following content:</p>
+
+<pre><code>&lt;p&gt;© Copyright @{_source.brand}&lt;/p&gt;
+</code></pre>
+
+<p>The <code>.mv</code> extension indicates that the file contains a template written in MVEL.</p>
+
+<p>After a cluster restart, we will be able to update the <code>full</code> view in order to use the preloaded template script (note the
+@includeNamed{} instruction):</p>
+
+<pre><code>...
+     "full": {
+         "view_lang": "mvel",
+         "view": "&lt;div id=\"product-@{_id}\"&gt;&lt;img src=\"/_view/catalog/product/@{_id}/logo\"/&gt;&lt;h2&gt;Detail of @{_source.name.toUpperCase()}&lt;/h2&gt;&lt;p&gt;Year: @{_source.since}, price: @{_source.price}€&lt;/p&gt;&lt;p&gt;@{_source.description}&lt;/p&gt;@includeNamed{\"copyright\"}&lt;/div&gt;"
+     }
+...
+</code></pre>
+
+<p>Preloaded templates are great candidates for code o text that are used in mulitple views.</p>
+
+<h2>Creating complete views from queries</h2>
+
+<p>The plugin allows to create custom views from query hits. Everytime such a view is requested, a set of predefined queries
+are executed and the results are used to create the view. Such views are stored in ElasticSearch as standard documents.</p>
+
+<p>This kind of view is really powerful and are a simple way to create complete web pages.</p>
+
+<p>First, let's create a more complex template called <code>list-of-products</code> and stored in the file <code>config/views/list-of-products.mv</code>:</p>
+
+<div class="highlight"><pre><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"utf-8"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;title&gt;</span>@{title}<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"viewport"</span> <span class="na">content=</span><span class="s">"width=device-width, initial-scale=1.0"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"description"</span> <span class="na">content=</span><span class="s">""</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"author"</span> <span class="na">content=</span><span class="s">""</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">"http://twitter.github.com/bootstrap/assets/css/bootstrap.css"</span> <span class="na">rel=</span><span class="s">"stylesheet"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;style&gt;</span>
+      <span class="nt">body</span> <span class="p">{</span>
+        <span class="k">padding-top</span><span class="o">:</span> <span class="m">60px</span><span class="p">;</span> <span class="c">/* 60px to make the container go all the way to the bottom of the topbar */</span>
+      <span class="p">}</span>
+    <span class="nt">&lt;/style&gt;</span>
+
+    <span class="c">&lt;!-- HTML5 shim, for IE6-8 support of HTML5 elements --&gt;</span>
+    <span class="c">&lt;!--[if lt IE 9]&gt;</span>
+<span class="c">      &lt;script src="http://html5shim.googlecode.com/svn/trunk/html5.js"&gt;&lt;/script&gt;</span>
+<span class="c">    &lt;![endif]--&gt;</span>
+  <span class="nt">&lt;/head&gt;</span>
+
+  <span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"navbar navbar-inverse navbar-fixed-top"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"navbar-inner"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"container"</span><span class="nt">&gt;</span>
+          <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">"btn btn-navbar"</span> <span class="na">data-toggle=</span><span class="s">"collapse"</span> <span class="na">data-target=</span><span class="s">".nav-collapse"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"icon-bar"</span><span class="nt">&gt;&lt;/span&gt;</span>
+            <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"icon-bar"</span><span class="nt">&gt;&lt;/span&gt;</span>
+            <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"icon-bar"</span><span class="nt">&gt;&lt;/span&gt;</span>
+          <span class="nt">&lt;/a&gt;</span>
+          <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">"brand"</span> <span class="na">href=</span><span class="s">"#"</span><span class="nt">&gt;</span>Catalog<span class="nt">&lt;/a&gt;</span>
+          <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"nav-collapse collapse"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">"nav"</span><span class="nt">&gt;</span>
+              <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">"active"</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">"#"</span><span class="nt">&gt;</span>List of products<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+            <span class="nt">&lt;/ul&gt;</span>
+          <span class="nt">&lt;/div&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+      <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"container"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;h1&gt;</span>List of products with scale 1:10<span class="nt">&lt;/h1&gt;</span>
+        <span class="nt">&lt;table</span> <span class="na">class=</span><span class="s">"table table-striped"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;thead&gt;</span>
+                <span class="nt">&lt;tr&gt;</span>
+                    <span class="nt">&lt;th&gt;</span>Code<span class="nt">&lt;/th&gt;</span>
+                    <span class="nt">&lt;th&gt;</span>Name<span class="nt">&lt;/th&gt;</span>
+                    <span class="nt">&lt;th&gt;</span>Brand<span class="nt">&lt;/th&gt;</span>
+                    <span class="nt">&lt;th&gt;</span>Year<span class="nt">&lt;/th&gt;</span>
+                <span class="nt">&lt;/tr&gt;</span>
+            <span class="nt">&lt;/thead&gt;</span>
+            <span class="nt">&lt;tbody&gt;</span>
+                @foreach{item : _queries.products_with_size_1_10}
+                    <span class="nt">&lt;tr&gt;</span>
+                        <span class="nt">&lt;td&gt;</span>@{item._source.code}<span class="nt">&lt;/td&gt;</span>
+                        <span class="nt">&lt;td&gt;</span>@{item._source.name}<span class="nt">&lt;/td&gt;</span>
+                        <span class="nt">&lt;td&gt;</span>@{item._source.brand}<span class="nt">&lt;/td&gt;</span>
+                        <span class="nt">&lt;td&gt;</span>@{item._source.since}<span class="nt">&lt;/td&gt;</span>
+                    <span class="nt">&lt;/tr&gt;</span>
+                @end{}
+            <span class="nt">&lt;/tbody&gt;</span>
+        <span class="nt">&lt;/table&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+
+<p>Next, we can create a view:</p>
+
+<pre><code>curl -XPUT "http://localhost:9200/catalog/list-of-products-by-size/1:10" -d "{
+    \"views\":{
+        \"default\":{
+            \"view_lang\": \"mvel\",
+            \"queries\": {
+                \"products_with_size_1_10\": {
+                    \"indices\": \"catalog\",
+                    \"types\": [\"product\"],
+                    \"query\" : {
+                          \"constant_score\" : {
+                              \"filter\" : {
+                                  \"term\" : { \"scale\" : \"10\"}
+                              }
+                          }
+                    }
+                }
+            },
+            \"view\" : \"@includeNamed{'list-of-products'; title='List of products'}\"
+        }
+    }
+}"
+</code></pre>
+
+<p>Note that the view is indexed in <code>catalog</code> index with the <code>list-of-products-by-size</code> document type and id <code>1:10</code>. It defines
+a view called <code>default</code> (but could have another name) and uses the <code>list-of-products.mv</code> template to render a list
+of products.</p>
+
+<p>The list of products is defined by the <code>products_with_size_1_10</code> query in the <code>queries</code> field of the view. This query
+selects 10 products that have a scale of 1:10.</p>
+
+<p>If you look closely at the previous template, you can see the following code:</p>
+
+<pre><code>@foreach{item : _queries.products_with_size_1_10}
+    &lt;tr&gt;
+        &lt;td&gt;@{item._source.code}&lt;/td&gt;
+        &lt;td&gt;@{item._source.name}&lt;/td&gt;
+        &lt;td&gt;@{item._source.brand}&lt;/td&gt;
+        &lt;td&gt;@{item._source.since}&lt;/td&gt;
+    &lt;/tr&gt;
+@end{}
+</code></pre>
+
+<p>This code uses a MVEL templating syntax <code>@foreach{}...@end{}</code> that iterates over the hits provided by the
+<code>products_with_size_1_10</code> query in order to construct a dynamic table of products that will be rendered in the
+final HTML page. Of course, multiple queries can be used in the same view.</p>
+
+<p>The result is available at <code>http://localhost:9200/_view/catalog/list-of-products-by-size/1:10</code> and looks like:</p>
+
+<p><img src="https://raw.github.com/tlrx/elasticsearch-view-plugin/gh-pages/samples/render_html_list.png" alt="List of products with scale 1:10"></p>
+
+<h2>Going further...</h2>
+
+<h3>Using Mustache</h3>
+
+<p>The plugin <a href="https://github.com/tlrx/elasticsearch-view-mustache-plugin">elasticsearch-view-mustache-plugin</a> adds
+<a href="http://mustache.github.com/">Mustache</a> as templating language for views.</p>
+
+<p>Mustache is a great templating engine that supports template encapsulation. To defined views with Mustache template engine,
+use <code>"view_lang": "mustache"</code>.</p>
+
+<p>Some sample usage of this plugin can be found in the Github project.</p>
+
+<h3>Rewriting URLs with Apache2</h3>
+
+<p>Apache2 server with mod_proxy and mod_rewrite can be used to redirect ElasticSearch Views Plugin URLs to better looking URLs.</p>
+
+<p>The goal is to have nicer URLs like <code>http://www.domain.com/catalog/list-of-products-by-size/1:10</code> that points
+to internal <code>http://localhost:9200/_view/catalog/list-of-products-by-size/1:10</code>.</p>
+
+<p>Here is a basic sample of such URL rewriting:</p>
+
+<pre><code>RewriteEngine on
+RewriteRule ^catalog/(.*)$ http://localhost:9200/_view/catalog/$1 [P,L]
+</code></pre>
+
+<p>We hope that this plugin will be as useful for you as it is for us, and we welcome your feedback and comments about this new plugin.</p>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
