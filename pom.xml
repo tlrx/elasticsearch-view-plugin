@@ -3,7 +3,7 @@
 
     <groupId>com.github.tlrx</groupId>
     <artifactId>elasticsearch-view-plugin</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.2</version>
     <packaging>jar</packaging>
 
     <name>elasticsearch-view-plugin</name>
