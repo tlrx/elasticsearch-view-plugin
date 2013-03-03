@@ -4,6 +4,16 @@
         <format>zip</format>
     </formats>
     <includeBaseDirectory>false</includeBaseDirectory>
+
+    <!-- Adds dependencies to zip package under lib directory -->
+    <dependencySets>
+        <dependencySet>
+            <includes>
+                <include>org.mvel:mvel2</include>
+            </includes>
+        </dependencySet>
+    </dependencySets>
+
     <files>
         <file>
             <source>target/${project.artifactId}-${project.version}.jar</source>
