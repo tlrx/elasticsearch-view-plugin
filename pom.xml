@@ -72,9 +72,9 @@
     </dependencies>
 
     <scm>
-        <url>git:git@github.com:tlrx/elasticsearch-view-plugin.git</url>
-        <connection>scm:git:git@github.com:tlrx/elasticsearch-view-plugin.git</connection>
-        <developerConnection>scm:git:git@github.com:tlrx/elasticsearch-view-plugin.git</developerConnection>
+        <url>git:git@github.com:luizgpsantos/elasticsearch-view-plugin.git</url>
+        <connection>scm:git@github.com:luizgpsantos/elasticsearch-view-plugin.git</connection>
+        <developerConnection>scm:git:git@github.com:luizgpsantos/elasticsearch-view-plugin.git</developerConnection>
     </scm>
 
     <issueManagement>
