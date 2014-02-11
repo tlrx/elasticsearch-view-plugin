@@ -18,17 +18,16 @@
  */
 package org.elasticsearch.view;
 
-import org.elasticsearch.common.collect.ImmutableMap;
-import org.elasticsearch.common.util.concurrent.ConcurrentCollections;
-import org.elasticsearch.index.get.GetField;
-import org.elasticsearch.search.SearchHit;
-import org.elasticsearch.search.SearchHitField;
-import org.elasticsearch.search.SearchHits;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.elasticsearch.common.collect.ImmutableMap;
+import org.elasticsearch.common.util.concurrent.ConcurrentCollections;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHitField;
+import org.elasticsearch.search.SearchHits;
 
 public class ViewContext {
 
@@ -40,7 +39,6 @@ public class ViewContext {
     private String id;
     private Long version;
     private Map<String, Object> source;
-    private Map<String, Object> fields;
     private Map<String, SearchHits> queries;
 
     public ViewContext(String lang, String view, String contentType) {

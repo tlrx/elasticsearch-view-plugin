@@ -17,7 +17,7 @@
     </parent>
 
     <properties>
-        <elasticsearch.version>0.20.5</elasticsearch.version>
+        <elasticsearch.version>0.90.11</elasticsearch.version>
         <mvel2.version>2.1.3.Final</mvel2.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -144,7 +144,6 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
 
