@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.tlrx</groupId>
+    <groupId>com.github.luizgpsantos</groupId>
     <artifactId>elasticsearch-view-plugin</artifactId>
-    <version>0.0.3-SNAPSHOT</version>
+    <version>0.0.5-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>elasticsearch-view-plugin</name>
@@ -17,7 +17,7 @@
     </parent>
 
     <properties>
-        <elasticsearch.version>0.20.5</elasticsearch.version>
+        <elasticsearch.version>0.90.11</elasticsearch.version>
         <mvel2.version>2.1.3.Final</mvel2.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -72,14 +72,14 @@
     </dependencies>
 
     <scm>
-        <url>git:git@github.com:tlrx/elasticsearch-view-plugin.git</url>
-        <connection>scm:git:git@github.com:tlrx/elasticsearch-view-plugin.git</connection>
-        <developerConnection>scm:git:git@github.com:tlrx/elasticsearch-view-plugin.git</developerConnection>
+        <url>git:git@github.com:luizgpsantos/elasticsearch-view-plugin.git</url>
+        <connection>scm:git@github.com:luizgpsantos/elasticsearch-view-plugin.git</connection>
+        <developerConnection>scm:git:git@github.com:luizgpsantos/elasticsearch-view-plugin.git</developerConnection>
     </scm>
 
     <issueManagement>
         <system>GitHub</system>
-        <url>https://github.com/tlrx/elasticsearch-view-plugin/issues/</url>
+        <url>https://github.com/luizgpsantos/elasticsearch-view-plugin/issues/</url>
     </issueManagement>
 
     <build>
@@ -144,7 +144,6 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
 

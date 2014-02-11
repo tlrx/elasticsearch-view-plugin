@@ -18,31 +18,26 @@
  */
 package org.elasticsearch.view;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.util.Set;
+
 import org.elasticsearch.common.collect.ImmutableMap;
 import org.elasticsearch.common.collect.ImmutableSet;
 import org.elasticsearch.common.component.AbstractComponent;
 import org.elasticsearch.common.inject.Inject;
 import org.elasticsearch.common.io.Streams;
 import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.common.util.concurrent.ConcurrentCollections;
 import org.elasticsearch.env.Environment;
-import org.elasticsearch.script.CompiledScript;
 import org.elasticsearch.view.binary.BinaryViewEngineService;
 import org.elasticsearch.view.mvel.MvelViewEngineService;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.util.Set;
-import java.util.concurrent.ConcurrentMap;
 
 public class ViewService extends AbstractComponent {
 
     private final String defaultViewLang;
 
     private final ImmutableMap<String, ViewEngineService> viewEngines;
-
-    private final ConcurrentMap<String, CompiledScript> staticCache = ConcurrentCollections.newConcurrentMap();
 
     public ViewService(Settings settings) {
         this(settings, new Environment(), ImmutableSet.<ViewEngineService>builder()

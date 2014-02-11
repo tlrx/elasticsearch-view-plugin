@@ -18,6 +18,11 @@
  */
 package org.elasticsearch.action.view;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.elasticsearch.ElasticSearchException;
 import org.elasticsearch.ElasticSearchIllegalArgumentException;
 import org.elasticsearch.ElasticSearchParseException;
@@ -31,7 +36,6 @@ import org.elasticsearch.cluster.block.ClusterBlockException;
 import org.elasticsearch.cluster.block.ClusterBlockLevel;
 import org.elasticsearch.cluster.metadata.MappingMetaData;
 import org.elasticsearch.cluster.routing.ShardIterator;
-import org.elasticsearch.common.Strings;
 import org.elasticsearch.common.collect.ImmutableMap;
 import org.elasticsearch.common.inject.Inject;
 import org.elasticsearch.common.settings.Settings;
@@ -43,15 +47,10 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.elasticsearch.threadpool.ThreadPool;
 import org.elasticsearch.transport.TransportService;
-import org.elasticsearch.view.exception.ElasticSearchViewNotFoundException;
 import org.elasticsearch.view.ViewContext;
 import org.elasticsearch.view.ViewResult;
 import org.elasticsearch.view.ViewService;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import org.elasticsearch.view.exception.ElasticSearchViewNotFoundException;
 
 
 public class TransportViewAction extends TransportShardSingleOperationAction<ViewRequest, ViewResponse> {
@@ -117,7 +116,7 @@ public class TransportViewAction extends TransportShardSingleOperationAction<Vie
         IndexShard indexShard = indexService.shardSafe(shardId);
         GetResult getResult = indexShard.getService().get(request.type(), request.id(), null, false);
 
-        if (!getResult.exists()) {
+        if (!getResult.isExists()) {
             throw new ElasticSearchIllegalArgumentException("Document not found, cannot render view");
         }
 
@@ -142,10 +141,10 @@ public class TransportViewAction extends TransportShardSingleOperationAction<Vie
         }
 
         // Set some org.elasticsearch.test.integration.views.mappings.data required for view rendering
-        viewContext.index(getResult.index())
-                .type(getResult.type())
-                .id(getResult.id())
-                .version(getResult.version())
+        viewContext.index(getResult.getIndex())
+                .type(getResult.getType())
+                .id(getResult.getId())
+                .version(getResult.getVersion())
                 .source(getResult.sourceAsMap());
 
         // Ok, let's render it with a ViewEngineService
@@ -283,7 +282,7 @@ public class TransportViewAction extends TransportShardSingleOperationAction<Vie
                                     }
 
                                     SearchResponse searchResponse = searchAction.execute(searchRequest).get();
-                                    viewContext.queriesAndHits(queryName, searchResponse.hits());
+                                    viewContext.queriesAndHits(queryName, searchResponse.getHits());
 
                                 } catch (Exception e) {
                                     viewContext.queriesAndHits(queryName, null);
