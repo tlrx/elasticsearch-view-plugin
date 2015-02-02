@@ -20,7 +20,7 @@ package org.elasticsearch.action.view;
 
 import org.elasticsearch.action.support.single.shard.SingleShardOperationRequest;
 import org.elasticsearch.common.Nullable;
-import org.elasticsearch.common.Required;
+
 
 public class ViewRequest extends SingleShardOperationRequest<ViewRequest> {
 
@@ -59,7 +59,6 @@ public class ViewRequest extends SingleShardOperationRequest<ViewRequest> {
     /**
      * Sets the id of the document to fetch.
      */
-    @Required
     public ViewRequest id(String id) {
         this.id = id;
         return this;

@@ -19,9 +19,9 @@
 package org.elasticsearch.view.exception;
 
 
-import org.elasticsearch.ElasticSearchException;
+import org.elasticsearch.ElasticsearchException;
 
-public class ElasticSearchViewNotFoundException extends ElasticSearchException {
+public class ElasticSearchViewNotFoundException extends ElasticsearchException {
     public ElasticSearchViewNotFoundException(String msg) {
         super(msg);
     }

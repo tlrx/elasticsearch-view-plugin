@@ -21,16 +21,16 @@ package org.elasticsearch.action.view;
 import org.elasticsearch.action.ActionListener;
 import org.elasticsearch.action.support.single.shard.SingleShardOperationRequestBuilder;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.client.internal.InternalClient;
+
 
 public class ViewRequestBuilder extends SingleShardOperationRequestBuilder<ViewRequest, ViewResponse, ViewRequestBuilder> {
 
     public ViewRequestBuilder(Client client) {
-        super((InternalClient) client, new ViewRequest());
+        super(client, new ViewRequest());
     }
 
     public ViewRequestBuilder(Client client, String index, String type, String id) {
-        super((InternalClient) client, new ViewRequest(index, type, id));
+        super(client, new ViewRequest(index, type, id));
     }
 
     /**
