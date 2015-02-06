@@ -52,6 +52,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.elasticsearch.action.support.ActionFilters;
 import org.elasticsearch.index.shard.ShardId;
 
 
@@ -67,8 +68,9 @@ public class TransportViewAction extends TransportShardSingleOperationAction<Vie
                                TransportService transportService,
                                IndicesService indicesService,
                                ViewService viewService,
-                               TransportSearchAction searchAction) {
-        super(settings,  ViewAction.NAME, threadPool, clusterService, transportService, null);
+                               TransportSearchAction searchAction, 
+                               ActionFilters actionFilters) {
+        super(settings,  ViewAction.NAME, threadPool, clusterService, transportService, actionFilters);
         this.indicesService = indicesService;
         this.viewService = viewService;
         this.searchAction = searchAction;
@@ -105,7 +107,7 @@ public class TransportViewAction extends TransportShardSingleOperationAction<Vie
     @Override
     protected ShardIterator shards(ClusterState state, InternalRequest action) {
         return clusterService.operationRouting()
-                .getShards(clusterService.state(), action.request().index(), action.request().type(), action.request().id(), null, null);
+                .getShards(clusterService.state(), action.concreteIndex(), action.request().type(), action.request().id(), null, null);
     }
     
     @Override
