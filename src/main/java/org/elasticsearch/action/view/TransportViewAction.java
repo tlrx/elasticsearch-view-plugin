@@ -32,7 +32,6 @@ import org.elasticsearch.cluster.block.ClusterBlockException;
 import org.elasticsearch.cluster.block.ClusterBlockLevel;
 import org.elasticsearch.cluster.metadata.MappingMetaData;
 import org.elasticsearch.cluster.routing.ShardIterator;
-import org.elasticsearch.common.Strings;
 import org.elasticsearch.common.collect.ImmutableMap;
 import org.elasticsearch.common.inject.Inject;
 import org.elasticsearch.common.settings.Settings;
@@ -53,6 +52,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.elasticsearch.index.shard.ShardId;
 
 
 public class TransportViewAction extends TransportShardSingleOperationAction<ViewRequest, ViewResponse> {
@@ -68,12 +68,17 @@ public class TransportViewAction extends TransportShardSingleOperationAction<Vie
                                IndicesService indicesService,
                                ViewService viewService,
                                TransportSearchAction searchAction) {
-        super(settings,  ViewAction.NAME, threadPool, clusterService, transportService);
+        super(settings,  ViewAction.NAME, threadPool, clusterService, transportService, null);
         this.indicesService = indicesService;
         this.viewService = viewService;
         this.searchAction = searchAction;
     }
 
+    @Override
+    protected boolean resolveIndex() {
+        return true;
+    }
+   
     @Override
     protected String executor() {
         return ThreadPool.Names.GENERIC;
@@ -89,29 +94,27 @@ public class TransportViewAction extends TransportShardSingleOperationAction<Vie
         return new ViewResponse();
     }
 
-    @Override
     protected ClusterBlockException checkGlobalBlock(ClusterState state, ViewRequest request) {
         return state.blocks().globalBlockedException(ClusterBlockLevel.READ);
     }
 
-    @Override
     protected ClusterBlockException checkRequestBlock(ClusterState state, ViewRequest request) {
         return state.blocks().indexBlockedException(ClusterBlockLevel.READ, request.index());
     }
-
+  
     @Override
-    protected ShardIterator shards(ClusterState state, ViewRequest request) {
+    protected ShardIterator shards(ClusterState state, InternalRequest action) {
         return clusterService.operationRouting()
-                .getShards(clusterService.state(), request.index(), request.type(), request.id(), null, null);
+                .getShards(clusterService.state(), action.request().index(), action.request().type(), action.request().id(), null, null);
     }
-
+    
     @Override
-    protected ViewResponse shardOperation(ViewRequest request, int shardId) throws ElasticsearchException {
+    protected ViewResponse shardOperation(ViewRequest request, ShardId shardId) throws ElasticsearchException {
 
         // Get the doc first
         IndexService indexService = indicesService.indexService(request.index());
-        IndexShard indexShard = indexService.shardSafe(shardId);
-        GetResult getResult = indexShard.getService().get(request.type(), request.id(), null, false, 1, VersionType.INTERNAL, null);
+        IndexShard indexShard = indexService.shardSafe(shardId.id());
+        GetResult getResult = indexShard.getService().get(request.type(), request.id(), null, false, 1, VersionType.INTERNAL, null, false);
 
         if (!getResult.isExists()) {
             throw new ElasticsearchIllegalArgumentException("Document not found, cannot render view");

@@ -37,7 +37,7 @@ public class RestViewAction extends BaseRestHandler {
 
     @Inject
     public RestViewAction(Settings settings, Client client, RestController controller) {
-        super(settings, client);
+        super(settings, controller, client);
         controller.registerHandler(GET, "/_view/{index}/{type}/{id}", this);
         controller.registerHandler(GET, "/_view/{index}/{type}/{id}/{format}", this);
     }
