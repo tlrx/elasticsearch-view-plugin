@@ -18,8 +18,14 @@
  */
 package org.elasticsearch.action.view;
 
+import java.io.IOException;
+import org.elasticsearch.action.ActionRequest;
+import org.elasticsearch.action.ActionRequestValidationException;
+import org.elasticsearch.action.ValidateActions;
 import org.elasticsearch.action.support.single.shard.SingleShardOperationRequest;
 import org.elasticsearch.common.Nullable;
+import org.elasticsearch.common.io.stream.StreamInput;
+import org.elasticsearch.common.io.stream.StreamOutput;
 
 
 public class ViewRequest extends SingleShardOperationRequest<ViewRequest> {
@@ -30,12 +36,42 @@ public class ViewRequest extends SingleShardOperationRequest<ViewRequest> {
     public static final String DEFAULT_VIEW = "default";
 
     ViewRequest() {
+      this.type = "_all";
+    }
+
+    /**
+    * Constructs a new view request against the specified index. The {@link #type(String)} and {@link #id(String)}
+    * must be set.
+    */
+    public ViewRequest(String index) {
+        super(index);
+        this.type = "_all";
+    }
+
+    /*
+    * Copy constructor that creates a new view request that is a copy of the one provided as an argument. 
+    * The new request will inherit though headers and context from the original request that caused it. 
+    */
+     public   ViewRequest(ViewRequest viewRequest, ActionRequest originalRequest) {
+
+         super(originalRequest);
+         this.index = viewRequest.index;
+         this.type = viewRequest.type;
+         this.id = viewRequest.id;
+     }
+     
+    /**
+    * Constructs a new view request starting from the provided request, meaning that it will
+    * inherit its headers and context, and against the specified index.
+     */
+    public ViewRequest(ActionRequest request, String index) {
+        super(request, index);
     }
 
     /**
      * Constructs a new view request against the specified index with the type and id.
      *
-     * @param index The index to get the document from
+     * @param index The index to view the document from
      * @param type  The type of the document
      * @param id    The id of the document
      */
@@ -83,5 +119,36 @@ public class ViewRequest extends SingleShardOperationRequest<ViewRequest> {
     public String format() {
         return format;
     }
-
+    @Override
+    public ActionRequestValidationException validate() {
+        ActionRequestValidationException validationException = super.validate();
+        if (type == null) {
+            validationException = ValidateActions.addValidationError("type is missing", validationException);
+        }
+        if (id == null) {
+            validationException = ValidateActions.addValidationError("id is missing", validationException);
+        }
+        return validationException;
+    }
+    
+    @Override
+    public void   readFrom(StreamInput in) throws IOException 
+    {
+        super.readFrom(in);
+        type = in.readSharedString();
+        id = in.readString();
+    }
+    
+    @Override
+    public void writeTo(StreamOutput out) throws IOException {
+        super.writeTo(out);
+        out.writeSharedString(type);
+        out.writeString(id);
+    }
+    
+    @Override
+    public String toString() {
+        return "view [" + index + "][" + type + "][" + id + "]";
+    }
+   
 }
