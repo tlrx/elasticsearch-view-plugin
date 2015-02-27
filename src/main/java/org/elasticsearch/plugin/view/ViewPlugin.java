@@ -34,10 +34,12 @@ import java.util.List;
 
 public class ViewPlugin extends AbstractPlugin {
 
+    @Override
     public String description() {
         return "Elasticsearch View Plugin";
     }
 
+    @Override
     public String name() {
         return "view-plugin";
     }

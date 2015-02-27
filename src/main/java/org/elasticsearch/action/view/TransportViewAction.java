@@ -18,9 +18,10 @@
  */
 package org.elasticsearch.action.view;
 
-import org.elasticsearch.ElasticSearchException;
-import org.elasticsearch.ElasticSearchIllegalArgumentException;
-import org.elasticsearch.ElasticSearchParseException;
+import org.elasticsearch.index.VersionType;
+import org.elasticsearch.ElasticsearchException;
+import org.elasticsearch.ElasticsearchIllegalArgumentException;
+import org.elasticsearch.ElasticsearchParseException;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.TransportSearchAction;
@@ -31,7 +32,6 @@ import org.elasticsearch.cluster.block.ClusterBlockException;
 import org.elasticsearch.cluster.block.ClusterBlockLevel;
 import org.elasticsearch.cluster.metadata.MappingMetaData;
 import org.elasticsearch.cluster.routing.ShardIterator;
-import org.elasticsearch.common.Strings;
 import org.elasticsearch.common.collect.ImmutableMap;
 import org.elasticsearch.common.inject.Inject;
 import org.elasticsearch.common.settings.Settings;
@@ -52,6 +52,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.elasticsearch.action.support.ActionFilters;
+import org.elasticsearch.index.shard.ShardId;
 
 
 public class TransportViewAction extends TransportShardSingleOperationAction<ViewRequest, ViewResponse> {
@@ -66,13 +68,19 @@ public class TransportViewAction extends TransportShardSingleOperationAction<Vie
                                TransportService transportService,
                                IndicesService indicesService,
                                ViewService viewService,
-                               TransportSearchAction searchAction) {
-        super(settings, threadPool, clusterService, transportService);
+                               TransportSearchAction searchAction, 
+                               ActionFilters actionFilters) {
+        super(settings,  ViewAction.NAME, threadPool, clusterService, transportService, actionFilters);
         this.indicesService = indicesService;
         this.viewService = viewService;
         this.searchAction = searchAction;
     }
 
+    @Override
+    protected boolean resolveIndex() {
+        return true;
+    }
+   
     @Override
     protected String executor() {
         return ThreadPool.Names.GENERIC;
@@ -88,37 +96,30 @@ public class TransportViewAction extends TransportShardSingleOperationAction<Vie
         return new ViewResponse();
     }
 
-    @Override
-    protected String transportAction() {
-        return ViewAction.NAME;
-    }
-
-    @Override
     protected ClusterBlockException checkGlobalBlock(ClusterState state, ViewRequest request) {
         return state.blocks().globalBlockedException(ClusterBlockLevel.READ);
     }
 
-    @Override
     protected ClusterBlockException checkRequestBlock(ClusterState state, ViewRequest request) {
         return state.blocks().indexBlockedException(ClusterBlockLevel.READ, request.index());
     }
-
+  
     @Override
-    protected ShardIterator shards(ClusterState state, ViewRequest request) {
+    protected ShardIterator shards(ClusterState state, InternalRequest action) {
         return clusterService.operationRouting()
-                .getShards(clusterService.state(), request.index(), request.type(), request.id(), null, null);
+                .getShards(clusterService.state(), action.concreteIndex(), action.request().type(), action.request().id(), null, null);
     }
-
+    
     @Override
-    protected ViewResponse shardOperation(ViewRequest request, int shardId) throws ElasticSearchException {
+    protected ViewResponse shardOperation(ViewRequest request, ShardId shardId) throws ElasticsearchException {
 
         // Get the doc first
         IndexService indexService = indicesService.indexService(request.index());
-        IndexShard indexShard = indexService.shardSafe(shardId);
-        GetResult getResult = indexShard.getService().get(request.type(), request.id(), null, false);
+        IndexShard indexShard = indexService.shardSafe(shardId.id());
+        GetResult getResult = indexShard.getService().get(request.type(), request.id(), null, false, 1, VersionType.INTERNAL, null, false);
 
-        if (!getResult.exists()) {
-            throw new ElasticSearchIllegalArgumentException("Document not found, cannot render view");
+        if (!getResult.isExists()) {
+            throw new ElasticsearchIllegalArgumentException("Document not found, cannot render view");
         }
 
         // Try to get a view stored at document level
@@ -132,7 +133,7 @@ public class TransportViewAction extends TransportShardSingleOperationAction<Vie
                     Map<String, Object> mapping = mappingMetaData.sourceAsMap();
                     viewContext = extract(mapping, request.format());
                 } catch (IOException e) {
-                    throw new ElasticSearchParseException("Failed to parse mapping content to map", e);
+                    throw new ElasticsearchParseException("Failed to parse mapping content to map", e);
                 }
             }
         }
@@ -142,10 +143,10 @@ public class TransportViewAction extends TransportShardSingleOperationAction<Vie
         }
 
         // Set some org.elasticsearch.test.integration.views.mappings.data required for view rendering
-        viewContext.index(getResult.index())
-                .type(getResult.type())
-                .id(getResult.id())
-                .version(getResult.version())
+        viewContext.index(getResult.getIndex())
+                .type(getResult.getType())
+                .id(getResult.getId())
+                .version(getResult.getVersion())
                 .source(getResult.sourceAsMap());
 
         // Ok, let's render it with a ViewEngineService
@@ -283,7 +284,7 @@ public class TransportViewAction extends TransportShardSingleOperationAction<Vie
                                     }
 
                                     SearchResponse searchResponse = searchAction.execute(searchRequest).get();
-                                    viewContext.queriesAndHits(queryName, searchResponse.hits());
+                                    viewContext.queriesAndHits(queryName, searchResponse.getHits());
 
                                 } catch (Exception e) {
                                     viewContext.queriesAndHits(queryName, null);

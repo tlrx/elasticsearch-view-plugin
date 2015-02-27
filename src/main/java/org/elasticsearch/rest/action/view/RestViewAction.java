@@ -37,12 +37,12 @@ public class RestViewAction extends BaseRestHandler {
 
     @Inject
     public RestViewAction(Settings settings, Client client, RestController controller) {
-        super(settings, client);
+        super(settings, controller, client);
         controller.registerHandler(GET, "/_view/{index}/{type}/{id}", this);
         controller.registerHandler(GET, "/_view/{index}/{type}/{id}/{format}", this);
     }
 
-    public void handleRequest(final RestRequest request, final RestChannel channel) {
+    public void handleRequest(final RestRequest request, final RestChannel channel, Client client) {
         ViewRequest viewRequest = new ViewRequest(request.param("index"), request.param("type"), request.param("id"));
         if (request.hasParam("format")) {
             viewRequest.format(request.param("format"));
@@ -57,22 +57,19 @@ public class RestViewAction extends BaseRestHandler {
 
             public void onResponse(ViewResponse response) {
                 try {
-                    channel.sendResponse(new BytesRestResponse(response.content(), response.contentType()));
+                    channel.sendResponse(new BytesRestResponse(RestStatus.OK, response.contentType(), response.content()));
                 } catch (Exception e) {
                     onFailure(e);
                 }
             }
 
             public void onFailure(Throwable e) {
-                try {
+              
                     if (e instanceof ElasticSearchViewNotFoundException) {
-                        channel.sendResponse(new XContentThrowableRestResponse(request, NOT_FOUND, e));
+                        channel.sendResponse(new BytesRestResponse(NOT_FOUND, e.toString()));
                     } else {
-                        channel.sendResponse(new XContentThrowableRestResponse(request, e));
+                        channel.sendResponse(new BytesRestResponse(RestStatus.BAD_REQUEST, e.toString()));
                     }
-                } catch (IOException e1) {
-                    logger.error("Failed to send failure response", e1);
-                }
             }
         });
     }

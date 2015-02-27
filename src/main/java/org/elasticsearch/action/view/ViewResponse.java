@@ -18,7 +18,11 @@
  */
 package org.elasticsearch.action.view;
 
+import java.io.IOException;
 import org.elasticsearch.action.ActionResponse;
+import org.elasticsearch.common.io.stream.StreamInput;
+import org.elasticsearch.common.io.stream.StreamOutput;
+import org.elasticsearch.index.get.GetResult;
 
 public class ViewResponse extends ActionResponse {
 
@@ -39,5 +43,23 @@ public class ViewResponse extends ActionResponse {
 
     public String contentType() {
         return this.contentType;
+    }
+    
+    
+    @Override
+    public void readFrom(StreamInput in) throws IOException {
+        super.readFrom(in);
+        contentType = in.readString();
+        int contentlength = in.readInt();
+        content = new byte[contentlength];
+        in.readFully(content);
+    }
+
+    @Override
+    public void writeTo(StreamOutput out) throws IOException {
+        super.writeTo(out);
+        out.writeString(contentType);
+        out.writeInt(content.length);
+        out.writeBytes(content);
     }
 }
